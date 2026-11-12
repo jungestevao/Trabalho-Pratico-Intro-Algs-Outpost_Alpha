@@ -42,6 +42,45 @@ def executar_musica_menu():
 
     pygame.mixer.music.play(-1)
 
+def mostrar_com_fade(tela, clock, imagem, rect, t_fadein=2000, t_parado=2000, t_fadeout=2000):
+    """Exibe qualquer Surface (imagem ou texto) com fade-in, pausa e fade-out."""
+    tempo_inicio = pygame.time.get_ticks()
+    
+    fim_fadein = t_fadein
+    fim_parado = fim_fadein + t_parado
+    fim_fadeout = fim_parado + t_fadeout
+
+    while True:
+        tela.fill((0, 0, 0))
+        conferir_inputs()
+
+        decorrido = pygame.time.get_ticks() - tempo_inicio
+
+        if decorrido <= fim_fadein:
+            progresso = decorrido / t_fadein
+            alpha = int(255 * progresso)
+
+        elif decorrido <= fim_parado:
+            alpha = 255
+
+        elif decorrido <= fim_fadeout:
+            tempo_etapa = decorrido - fim_parado
+            progresso = tempo_etapa / t_fadeout
+            alpha = int(255 * (1.0 - progresso))
+
+        else:
+            break  # Terminou essa imagem, sai do loop para ir para a próxima
+
+        alpha = max(0, min(255, alpha))
+
+        # Aplica a transparência na cópia
+        img_atual = imagem.copy()
+        img_atual.fill((255, 255, 255, alpha), special_flags=pygame.BLEND_RGBA_MULT)
+        tela.blit(img_atual, rect)
+
+        pygame.display.update()
+        clock.tick(FPS)
+
 def executar_abertura(tela,clock):
     """
     Executa a animação de abertura do jogo
@@ -59,43 +98,12 @@ def executar_abertura(tela,clock):
 
     # Config logo puc
     logo_puc = pygame.image.load("assets/imagens/brasao-pucminas.png").convert_alpha()
-    rect_logo = logo_puc.get_rect(center=tela.get_rect().center) # Liga a logo ao retângulo ligado ao centro da tela
-    
+    rect_logo_puc = logo_puc.get_rect(center=tela.get_rect().center) # Liga a logo ao retângulo ligado ao centro da tela
 
-    # Config do tempo de execução
-
-    
-    logo_tempo_fadein = 2000
-    logo_tempo_parado = logo_tempo_fadein  + 2000 # 4000 ms
-    logo_tempo_fadeout = logo_tempo_parado + 2000 # 6000 ms
-
-    tempo_inicio = pygame.time.get_ticks()
+    # Iniciar musica
     executar_musica_menu()
 
-    while True:
-        tela.fill((0, 0, 0))
-        conferir_inputs()
+    # Sequência de animações
+    mostrar_com_fade(tela,clock,logo_puc,rect_logo_puc)
 
-        decorrido = pygame.time.get_ticks() - tempo_inicio
-
-        if decorrido <= logo_tempo_fadein:
-            progresso = min(1.0, max(0.0, decorrido / logo_tempo_fadein))
-            alpha = int(255 * progresso)
-
-        elif decorrido <= logo_tempo_parado:
-            alpha = 255
-
-        elif decorrido <= logo_tempo_fadeout:
-
-            tempo_etapa = decorrido - logo_tempo_parado
-            duracao_etapa = logo_tempo_fadeout - logo_tempo_parado
-            progresso = min(1.0, max(0.0, tempo_etapa / duracao_etapa))
-            alpha = int(255 * (1.0 - progresso))
-            
-        logo_atual = logo_puc.copy()
-        logo_atual.fill((255, 255, 255, alpha), special_flags=pygame.BLEND_RGBA_MULT)
-        tela.blit(logo_atual, rect_logo)        
-        
-        pygame.display.update()
-        clock.tick(FPS)
 
