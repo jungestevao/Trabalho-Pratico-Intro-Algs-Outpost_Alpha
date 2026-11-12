@@ -1,4 +1,4 @@
-# Outpost Alpha-04
+# Outpost Alpha
 
 <img width="1024" height="572" alt="image" src="https://github.com/user-attachments/assets/15be7931-0144-4a48-ac8b-0ce10aef2a40" />
 
