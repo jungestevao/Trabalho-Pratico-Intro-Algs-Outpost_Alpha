@@ -40,7 +40,7 @@ def executar_jogo():
         # Verificação de estado (mudança de telas)
 
         if estado_atual == "iniciando":
-            if executar_abertura(tela,clock):
-                estado_atual == "menu"
+            estado_atual = executar_abertura(tela,clock)
         if estado_atual == "menu":
-            estado_atual = executar_menu()
+            estado_atual = executar_menu(tela,clock)
+        print(estado_atual)

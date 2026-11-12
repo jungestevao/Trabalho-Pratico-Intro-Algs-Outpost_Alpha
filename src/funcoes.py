@@ -1,5 +1,6 @@
 import pygame
 from sys import exit
+import random
 from src.config import (
     LARGURA_TELA,
     ALTURA_TELA,
@@ -116,8 +117,50 @@ def executar_abertura(tela,clock):
 
     mostrar_com_fade(tela,clock,logo_ES,rect_logo_ES)
 
-    return True
+    return "menu"
 
-def executar_menu():
-    modo = "iniciando"
-    return modo
+def gerar_flocos():
+    """Gera 100 flocos em posições aleatórias com velocidades suaves (float)."""
+    flocos_neve = []
+    for _ in range(100):
+        x = float(random.randint(0, LARGURA_TELA))
+        y = float(random.randint(-ALTURA_TELA, ALTURA_TELA))
+        velocidade_y = random.uniform(0.4, 1.0)   # Queda bem suave
+        velocidade_x = random.uniform(-0.2, 0.2)  # Vento sutil
+        tamanho = random.randint(1, 3)
+        flocos_neve.append([x, y, velocidade_y, velocidade_x, tamanho])
+
+    return flocos_neve
+
+
+def executar_menu(tela, clock):
+    """Executa o loop do menu principal"""
+    # Config das imagens do menu
+    imagem_fundo = pygame.image.load("assets/imagens/imagem-fundo-menu.jpg").convert()
+    imagem_fundo = pygame.transform.scale(imagem_fundo, (LARGURA_TELA, ALTURA_TELA))
+
+    # Gerar Flocos
+    flocos_neve = gerar_flocos()
+
+    while True:
+        conferir_inputs()
+
+        tela.blit(imagem_fundo, (0, 0))
+
+        # 3. Atualiza e desenha CADA floco de neve
+        for floco in flocos_neve:
+            floco[1] += floco[2]  # Cai no eixo Y
+            floco[0] += floco[3]  # Move no eixo X (vento)
+        
+            # Reset ao sair da tela 
+            if floco[1] > ALTURA_TELA:
+                floco[1] = float(random.randint(-20, -5))
+                floco[0] = float(random.randint(0, LARGURA_TELA))
+                floco[2] = random.uniform(0.4, 1.0)    
+
+            # Desenha o floco 
+            cor_neve = (180, 195, 210) if floco[4] == 1 else (230, 240, 255)
+            pygame.draw.circle(tela, cor_neve, (int(floco[0]), int(floco[1])), floco[4])
+
+        pygame.display.flip()
+        clock.tick(FPS)
