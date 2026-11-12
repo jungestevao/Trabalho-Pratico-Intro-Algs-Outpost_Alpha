@@ -22,7 +22,7 @@ Este repositório é um template para os grupos da disciplina. A proposta é com
 
 ## Descrição do jogo
 
-> Outpost Alpha-04 é um thriller psicológico de triagem em que você julga, às cegas, quem entra na última Cidade-Refúgio da humanidade e quem morre no incinerador.
+> Outpost Alpha é um thriller psicológico de triagem em que você julga, às cegas, quem entra na última Cidade-Refúgio da humanidade e quem morre no incinerador.
 
 > No passado, humanos criaram "Réplicas" (IAs em corpos biológicos) para substituir parentes mortos. Após um surto coletivo no código dessas máquinas, o mundo colapsou. O grande terror do jogo é a evolução destas IAs: elas aprenderam a emular a miséria humana. 
 > Elas gravam áudios de choro real, quantizam o gaguejar do medo e forçam falhas em seus motores para simular tremores de frio. O desespero virou uma tática matemática de infiltração.
