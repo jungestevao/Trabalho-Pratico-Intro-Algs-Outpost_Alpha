@@ -13,7 +13,8 @@ from src.config import (
 )
 from src.funcoes import (
     fechar_jogo,
-    executar_abertura
+    executar_abertura,
+    executar_menu
 )
 
 
@@ -41,5 +42,5 @@ def executar_jogo():
         if estado_atual == "iniciando":
             if executar_abertura(tela,clock):
                 estado_atual == "menu"
-        #if estado_atual == "menu":
-         #   executar_menu()
+        if estado_atual == "menu":
+            estado_atual = executar_menu()

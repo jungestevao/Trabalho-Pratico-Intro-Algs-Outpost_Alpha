@@ -100,10 +100,24 @@ def executar_abertura(tela,clock):
     logo_puc = pygame.image.load("assets/imagens/brasao-pucminas.png").convert_alpha()
     rect_logo_puc = logo_puc.get_rect(center=tela.get_rect().center) # Liga a logo ao retângulo ligado ao centro da tela
 
+    # Config logo eng.software
+    logo_ES = pygame.image.load("assets/imagens/Logo_ES_negativo@4x-1.png").convert_alpha()
+    largura_alvo = int(tela.get_width() * 0.50) # Define a largura como 50% da largura da tela
+    altura_alvo = int(largura_alvo * (logo_ES.get_height() / logo_ES.get_width())) # Calcula a altura exata mantendo a proporção
+    logo_ES = pygame.transform.smoothscale(logo_ES, (largura_alvo, altura_alvo)) # Redimensiona com suavização (ideal para imagens grandes reduzidas)
+    rect_logo_ES = logo_ES.get_rect(center=tela.get_rect().center)
+    
+
     # Iniciar musica
     executar_musica_menu()
 
     # Sequência de animações
     mostrar_com_fade(tela,clock,logo_puc,rect_logo_puc)
 
+    mostrar_com_fade(tela,clock,logo_ES,rect_logo_ES)
 
+    return True
+
+def executar_menu():
+    modo = "iniciando"
+    return modo
