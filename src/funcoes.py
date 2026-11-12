@@ -30,23 +30,72 @@ def conferir_inputs():
             if event.key == pygame.K_ESCAPE:
                 fechar_jogo()
 
-def executar_abertura(tela,clock,fonte):
-
+def executar_musica_menu():
+    """Executa a música do menu"""
     # Config música
 
     pygame.mixer.init()
     pygame.mixer.music.load("assets/sons/MainTheme.mp3")
     pygame.mixer.music.set_volume(VOLUME_MUSICA)
+
+    # Executar música
+
     pygame.mixer.music.play(-1)
 
-    # Config Texto tela
+def executar_abertura(tela,clock):
+    """
+    Executa a animação de abertura do jogo
+    
+    Parâmetros: 
+        Tela (Object): Superficie principal criada na execução inicial do código.
 
-    titulo = fonte.render(TITULO_JOGO, False, 'White')
-    titulo_ret = titulo.get_rect(center = (400,100))
+    Saída: 
+        str: String referente ao estado do jogo após o fim da execução.
+    """
+    # Config fonte texto
+    fonte_texto = pygame.font.Font(None, 50)
+    texto = fonte_texto.render("Bem vindo a Outpost Alpha!", False, "White")
+    texto_ret = texto.get_rect(midtop = (400, 100))
+
+    # Config logo puc
+    logo_puc = pygame.image.load("assets/imagens/brasao-pucminas.png").convert_alpha()
+    rect_logo = logo_puc.get_rect(center=tela.get_rect().center) # Liga a logo ao retângulo ligado ao centro da tela
+    
+
+    # Config do tempo de execução
+
+    
+    logo_tempo_fadein = 2000
+    logo_tempo_parado = logo_tempo_fadein  + 2000 # 4000 ms
+    logo_tempo_fadeout = logo_tempo_parado + 2000 # 6000 ms
+
+    tempo_inicio = pygame.time.get_ticks()
+    executar_musica_menu()
 
     while True:
-
+        tela.fill((0, 0, 0))
         conferir_inputs()
-        tela.blit(titulo,titulo_ret)
 
+        decorrido = pygame.time.get_ticks() - tempo_inicio
+
+        if decorrido <= logo_tempo_fadein:
+            progresso = min(1.0, max(0.0, decorrido / logo_tempo_fadein))
+            alpha = int(255 * progresso)
+
+        elif decorrido <= logo_tempo_parado:
+            alpha = 255
+
+        elif decorrido <= logo_tempo_fadeout:
+
+            tempo_etapa = decorrido - logo_tempo_parado
+            duracao_etapa = logo_tempo_fadeout - logo_tempo_parado
+            progresso = min(1.0, max(0.0, tempo_etapa / duracao_etapa))
+            alpha = int(255 * (1.0 - progresso))
+            
+        logo_atual = logo_puc.copy()
+        logo_atual.fill((255, 255, 255, alpha), special_flags=pygame.BLEND_RGBA_MULT)
+        tela.blit(logo_atual, rect_logo)        
+        
+        pygame.display.update()
+        clock.tick(FPS)
 
