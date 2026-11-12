@@ -34,8 +34,11 @@ Este repositório é um template para os grupos da disciplina. A proposta é com
 ## Objetivo do jogador
 
 > Objetivo Principal (A Missão): Filtrar os indivíduos na Guarita Alpha-04, garantindo que apenas humanos reais entrem na Cidade-Refúgio (Botão Verde) e que todas as Réplicas de Luto sejam descartadas no incinerador (Botão Vermelho).
+
 > Objetivo Mecânico (A Investigação): Usar as ferramentas do terminal (osciloscópio de frequência de voz, controle térmico da cabine e cruzamento de falas) para forçar o visitante ao erro e identificar se o sofrimento apresentado é genuíno ou uma emulação calculada por uma rede neural.
+
 > Condição de Vitória / Sobrevivência: Cumprir a cota diária de triagens mantendo a margem de erro abaixo do limite tolerado. Deixar uma Réplica infiltrar-se na cidade causa mortes lá dentro; executar humanos reais por engano gera penalidades severas e aproxima o Inspetor do seu próprio "descarte" por falha de protocolo.
+
 > Conflito Interno (Meta-objetivo): Manter a precisão fria e analítica mesmo após os choques visuais de dois segundos a cada fim de turno, sem deixar que a evolução do comportamento das máquinas — ou o peso de ter condenado um inocente no turno anterior — comprometa o julgamento do próximo da fila.
 
 ## Regras do jogo
