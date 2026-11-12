@@ -6,8 +6,6 @@ A proposta deve apresentar uma ideia simples, clara e viável para ser desenvolv
 
 ## 1. Nome provisório do jogo
 
-Informe o nome provisório do jogo.
-
 **Nome:**
 
 > Outpost_Alpha
