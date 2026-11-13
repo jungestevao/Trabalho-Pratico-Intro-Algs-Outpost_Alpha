@@ -1,5 +1,5 @@
 import pygame
-import src
+
 
 from src.config import (
     LARGURA_TELA,

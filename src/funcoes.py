@@ -7,7 +7,7 @@ from src.config import (
     FPS,
     TITULO_JOGO,
     CINZA,
-    VOLUME_MUSICA,
+    VOLUME_MUSICA
 )
 from src.dados import(
     registrar_dados
@@ -176,7 +176,15 @@ def executar_abertura(tela,clock,dados):
 
 
 def gerar_flocos():
-    """Gera 100 flocos em posições aleatórias com velocidades suaves (float)."""
+    """
+    Gera 100 flocos em posições aleatórias com velocidades suaves (float).
+    
+    Parâmetros:
+        None.
+    
+    Saídas:
+        flocos_neve (list):
+    """
     flocos_neve = []
     for _ in range(100):
         x = float(random.randint(0, LARGURA_TELA))
@@ -189,7 +197,19 @@ def gerar_flocos():
     return flocos_neve
 
 def variar_alfa(alfa, aumentando, minimo=60, maximo=180):
-    """Atualiza o alpha e troca a direção ao atingir os limites."""
+    """
+    Atualiza o alpha e troca a direção ao atingir os limites.
+
+    Parâmetros:
+        alfa (int): coeficiente de transparência,
+        aumentando (bool): Flag que representa a direção de alfa,
+        minimo (int): valor minimo de variação do alfa,
+        maximo (int): valor máximo de variação do alfa.
+
+    Saídas:
+        alfa (int): valor atualizado para alfa,
+        aumentando (bool): Flag atualizada de acordo com o estado. 
+    """
     if alfa >= maximo:
         alfa = maximo
         aumentando = False
@@ -226,6 +246,10 @@ def executar_menu(tela, clock, dados):
     botao_config = Botao(btn_normal, btn_hover, "CONFIG", fonte_menu, (centro_x, 440))
     botao_sair = Botao(btn_normal, btn_hover, "SAIR", fonte_menu, (centro_x, 545))
 
+    # Conferir se a música está ativa
+    if not(pygame.mixer.music.get_busy()):
+        executar_musica_menu()
+
     # Gerar Flocos
     flocos_neve = gerar_flocos()
     alfa = 0
@@ -248,6 +272,8 @@ def executar_menu(tela, clock, dados):
                     dados["tela"] = "historia"
                     registrar_dados(dados)
                     return
+                else: 
+                    dados["tela"] = "jogo"
             elif botao_sair.foi_clicado(evento):
                 dados["tela"] = "abertura"
                 registrar_dados(dados)
