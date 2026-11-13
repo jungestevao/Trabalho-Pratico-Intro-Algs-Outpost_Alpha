@@ -10,7 +10,5 @@ BRANCO = (255, 255, 255)
 PRETO = (0, 0, 0)
 CINZA = (212,212,212)
 
-CAMINHO_RECORDE = "data/recorde.txt"
-CAMINHO_SPRITES = "assets/imagens/spritesheet.bmp"
-
 VOLUME_MUSICA = 0.8
+DADOS = "data/dados"

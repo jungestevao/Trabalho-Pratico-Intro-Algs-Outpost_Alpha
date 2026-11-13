@@ -7,8 +7,6 @@ from src.config import (
     FPS,
     TITULO_JOGO,
     CINZA,
-    CAMINHO_RECORDE,
-    CAMINHO_SPRITES,
     VOLUME_MUSICA,
 )
 
