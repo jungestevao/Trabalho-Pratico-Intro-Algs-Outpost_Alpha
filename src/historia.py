@@ -124,9 +124,14 @@ def mostrar_cena(tela, clock, caminho, legenda, indice, t_saida=T_SAIDA, t_parad
     inicio = pygame.time.get_ticks()
     rnd = random.Random(indice)
 
+    fala_completa = False      # a legenda já foi escrita por inteiro
+    completar_fala = False     # espaço pediu para completar a fala agora
+
     while True:
         if _processar_eventos():
-            break  # espaço: pula para a próxima cena
+            if fala_completa:
+                break          # espaço com a fala completa: pula para a próxima cena
+            completar_fala = True  # espaço durante a digitação: completa a fala
 
         decorrido = pygame.time.get_ticks() - inicio
         if decorrido >= total:
@@ -168,8 +173,12 @@ def mostrar_cena(tela, clock, caminho, legenda, indice, t_saida=T_SAIDA, t_parad
         tela.blit(caixa, (0, ALTURA_TELA - altura_caixa))
 
         letras = int((decorrido - inicio_digitacao) / T_DIGITACAO) if decorrido > inicio_digitacao else 0
+        if completar_fala:
+            letras = total_letras
+        letras = min(letras, total_letras)
+        fala_completa = letras >= total_letras
         partes = _letras_visiveis_por_linha(linhas, letras)
-        digitando = letras < total_letras
+        digitando = not fala_completa
         cursor_visivel = digitando and (decorrido // 250) % 2 == 0
 
         for i, parte in enumerate(partes):
