@@ -206,4 +206,4 @@ def executar_historia(tela, clock):
         mostrar_cena(tela, clock, caminho, legenda, indice)
 
     pygame.mixer.music.stop()
-    return True
+    return "menu"

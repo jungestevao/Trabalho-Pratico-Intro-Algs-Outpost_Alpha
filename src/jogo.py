@@ -16,7 +16,9 @@ from src.funcoes import (
     executar_abertura,
     executar_menu
 )
-
+from src.historia import (
+    executar_historia
+)
 
 def executar_jogo():
     """Executa o loop principal do jogo e controla estado, colisões e pontuação."""
@@ -39,3 +41,5 @@ def executar_jogo():
             estado_atual = executar_abertura(tela,clock)
         if estado_atual == "menu":
             estado_atual = executar_menu(tela,clock)
+        if estado_atual == "jogo":
+            estado_atual = executar_historia(tela,clock)
