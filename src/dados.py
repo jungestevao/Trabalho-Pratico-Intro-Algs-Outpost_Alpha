@@ -1,3 +1,5 @@
+import ast
+
 def ler_dados(arquivo):
     """
     Lê os dados em data/dados_jogador.txt e transforma em dicionário.
@@ -11,10 +13,14 @@ def ler_dados(arquivo):
     dic = {}
     formato_dados = ["fase", 1,"erros", 0,"acertos",0,"historia",True]
     try:
-        with open(arquivo,"r",encoding="utf-8")as arquivo:
-            for linha in arquivo:
+        with open(arquivo,"r",encoding="utf-8")as dados:
+            for linha in dados:
                 chave,dado = linha.strip().split(",")
-                dic[chave] = dado
+
+                try:
+                    dic[chave] = ast.literal_eval(dado)
+                except (ValueError, SyntaxError):
+                    dic[chave] = dado
                 
 
     except FileNotFoundError:
@@ -36,3 +42,14 @@ def registrar_dados(dicionario,arquivo):
 
     OBS: Após o fim da execução, o arquivo é atualizado.
     """
+    with open(arquivo,"w",encoding="utf-8")as dados:
+        for chave in dicionario.keys():
+            dados.write(f"{chave},{dicionario[chave]}\n")
+
+from config import (
+    DADOS
+)
+
+dic = ler_dados(DADOS)
+print(dic)
+registrar_dados(dic,DADOS)

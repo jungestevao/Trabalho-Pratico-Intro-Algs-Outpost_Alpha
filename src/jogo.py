@@ -17,6 +17,11 @@ from src.funcoes import (
 from src.historia import (
     executar_historia
 )
+from src.dados import(
+    ler_dados,
+    registrar_dados
+    
+)
 
 def executar_jogo():
     """Executa o loop principal do jogo e controla estado, colisões e pontuação."""
