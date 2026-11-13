@@ -27,10 +27,6 @@ def executar_jogo():
 
     clock = pygame.time.Clock()
 
-    fonte_titulo = pygame.font.Font(FONTE_TITULO[0],FONTE_TITULO[1])
-    titulo = fonte_titulo.render(TITULO_JOGO, False, 'White')
-    titulo_ret = titulo.get_rect(center = (400,100))
-
     pygame.display.set_caption(TITULO_JOGO)
 
     estado_atual = "iniciando"

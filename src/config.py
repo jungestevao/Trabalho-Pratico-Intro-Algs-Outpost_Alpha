@@ -4,7 +4,7 @@ ALTURA_TELA = 600
 FPS = 60
 
 TITULO_JOGO = "Outpost-Alpha"
-FONTE_TITULO = (None, 50)
+FONTE_TITULO = ("assets/fontes/Asimovian/Asimovian-Regular.ttf", 50)
 
 BRANCO = (255, 255, 255)
 PRETO = (0, 0, 0)

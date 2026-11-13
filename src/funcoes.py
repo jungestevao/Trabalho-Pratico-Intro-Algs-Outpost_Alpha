@@ -107,7 +107,11 @@ def executar_abertura(tela,clock):
     altura_alvo = int(largura_alvo * (logo_ES.get_height() / logo_ES.get_width())) # Calcula a altura exata mantendo a proporção
     logo_ES = pygame.transform.smoothscale(logo_ES, (largura_alvo, altura_alvo)) # Redimensiona com suavização (ideal para imagens grandes reduzidas)
     rect_logo_ES = logo_ES.get_rect(center=tela.get_rect().center)
-    
+
+    # Config logo Grupo 3
+    logo_grupo = pygame.image.load("assets/imagens/logo-grupo-3.png").convert_alpha()
+    logo_grupo = pygame.transform.smoothscale(logo_grupo,(largura_alvo,altura_alvo))
+    rect_logo_grupo = logo_grupo.get_rect(center=tela.get_rect().center)
 
     # Iniciar musica
     executar_musica_menu()
@@ -116,6 +120,8 @@ def executar_abertura(tela,clock):
     mostrar_com_fade(tela,clock,logo_puc,rect_logo_puc)
 
     mostrar_com_fade(tela,clock,logo_ES,rect_logo_ES)
+
+    mostrar_com_fade(tela,clock,logo_grupo,rect_logo_grupo)
 
     return "menu"
 
@@ -132,16 +138,26 @@ def gerar_flocos():
 
     return flocos_neve
 
+def variar_alfa(alfa, aumentando):
+    """Varia o alpha do sprite conforme a direção informada."""
+    return alfa + 1 if aumentando else alfa - 1
 
 def executar_menu(tela, clock):
     """Executa o loop do menu principal"""
     # Config das imagens do menu
     imagem_fundo = pygame.image.load("assets/imagens/imagem-fundo-menu.jpg").convert()
     imagem_fundo = pygame.transform.scale(imagem_fundo, (LARGURA_TELA, ALTURA_TELA))
+    # Config do sprite do título
+    titulo = pygame.image.load("assets/imagens/outpost-alpha.png").convert_alpha()
+    largura_titulo = 600
+    altura_titulo = int(largura_titulo * titulo.get_height() / titulo.get_width())
+    titulo = pygame.transform.smoothscale(titulo,(largura_titulo, altura_titulo))
+    titulo_ret = titulo.get_rect(center=(LARGURA_TELA // 2, 160))
 
     # Gerar Flocos
     flocos_neve = gerar_flocos()
-
+    alfa = 0
+    aumentando = True
     while True:
         conferir_inputs()
 
@@ -161,6 +177,17 @@ def executar_menu(tela, clock):
             # Desenha o floco 
             cor_neve = (180, 195, 210) if floco[4] == 1 else (230, 240, 255)
             pygame.draw.circle(tela, cor_neve, (int(floco[0]), int(floco[1])), floco[4])
+            
+        # Verifica a transparência do título
+        if alfa >= 180:
+            alfa = 180
+            aumentando = False
+        elif alfa <= 60:
+            alfa = 60
+            aumentando = True
 
+        alfa = variar_alfa(alfa, aumentando)
+        titulo.set_alpha(alfa)
+        tela.blit(titulo, titulo_ret)
         pygame.display.flip()
         clock.tick(FPS)
