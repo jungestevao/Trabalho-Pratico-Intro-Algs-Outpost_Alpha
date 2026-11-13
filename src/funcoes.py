@@ -12,10 +12,62 @@ from src.config import (
     VOLUME_MUSICA,
 )
 
+class Botao:
+    def __init__(self, img_normal_base, img_hover_base, texto, fonte, pos_centro):
+        # 1. Prepara a imagem do estado NORMAL (com texto)
+        self.img_normal = img_normal_base.copy()
+        self._escrever_texto(self.img_normal, texto, fonte, (220, 220, 220))
+
+        # 2. Prepara a imagem do estado HOVER (com texto destacado)
+        self.img_hover = img_hover_base.copy()
+        self._escrever_texto(self.img_hover, texto, fonte, (255, 255, 255))
+
+        # Começa com a imagem normal
+        self.image = self.img_normal
+        self.rect = self.image.get_rect(center=pos_centro)
+
+    def _escrever_texto(self, superficie, texto, fonte, cor):
+        """Centraliza o texto dentro da superfície do botão."""
+        txt_surf = fonte.render(texto, True, cor)
+        txt_rect = txt_surf.get_rect(center=(superficie.get_width() // 2, superficie.get_height() // 2))
+        superficie.blit(txt_surf, txt_rect)
+
+    def desenhar(self, tela):
+        # Verifica a posição atual do mouse a cada frame
+        pos_mouse = pygame.mouse.get_pos()
+
+        # Troca o sprite se o mouse estiver dentro do retângulo do botão
+        if self.rect.collidepoint(pos_mouse):
+            self.image = self.img_hover
+        else:
+            self.image = self.img_normal
+
+        tela.blit(self.image, self.rect)
+
+    def foi_clicado(self, evento):
+        if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
+            return self.rect.collidepoint(evento.pos)
+        return False
+
+
 def fechar_jogo():
     """ Finalizar a execução do jogo. """
     pygame.quit()
     exit()
+
+
+
+def executar_musica_menu():
+    """Executa a música do menu"""
+    # Config música
+
+    pygame.mixer.init()
+    pygame.mixer.music.load("assets/sons/MainTheme.mp3")
+    pygame.mixer.music.set_volume(VOLUME_MUSICA)
+
+    # Executar música
+
+    pygame.mixer.music.play(-1)
 
 def conferir_inputs():     
 
@@ -30,18 +82,8 @@ def conferir_inputs():
             # Sai do jogo ao apertar ESC
             if event.key == pygame.K_ESCAPE:
                 fechar_jogo()
-
-def executar_musica_menu():
-    """Executa a música do menu"""
-    # Config música
-
-    pygame.mixer.init()
-    pygame.mixer.music.load("assets/sons/MainTheme.mp3")
-    pygame.mixer.music.set_volume(VOLUME_MUSICA)
-
-    # Executar música
-
-    pygame.mixer.music.play(-1)
+            if event.key == pygame.K_SPACE:
+                return "menu"
 
 def mostrar_com_fade(tela, clock, imagem, rect, t_fadein=2000, t_parado=2000, t_fadeout=2000):
     """Exibe qualquer Surface (imagem ou texto) com fade-in, pausa e fade-out."""
@@ -53,7 +95,9 @@ def mostrar_com_fade(tela, clock, imagem, rect, t_fadein=2000, t_parado=2000, t_
 
     while True:
         tela.fill((0, 0, 0))
-        conferir_inputs()
+        estado = conferir_inputs()
+        if estado == "menu":
+            return estado
 
         decorrido = pygame.time.get_ticks() - tempo_inicio
 
@@ -117,13 +161,15 @@ def executar_abertura(tela,clock):
     executar_musica_menu()
 
     # Sequência de animações
-    mostrar_com_fade(tela,clock,logo_puc,rect_logo_puc)
-
-    mostrar_com_fade(tela,clock,logo_ES,rect_logo_ES)
-
-    mostrar_com_fade(tela,clock,logo_grupo,rect_logo_grupo)
+    if mostrar_com_fade(tela, clock, logo_puc, rect_logo_puc) == "menu":
+        return "menu"
+    if mostrar_com_fade(tela, clock, logo_ES, rect_logo_ES) == "menu":
+        return "menu"
+    if mostrar_com_fade(tela, clock, logo_grupo, rect_logo_grupo) == "menu":
+        return "menu"
 
     return "menu"
+
 
 def gerar_flocos():
     """Gera 100 flocos em posições aleatórias com velocidades suaves (float)."""
@@ -138,9 +184,17 @@ def gerar_flocos():
 
     return flocos_neve
 
-def variar_alfa(alfa, aumentando):
-    """Varia o alpha do sprite conforme a direção informada."""
-    return alfa + 1 if aumentando else alfa - 1
+def variar_alfa(alfa, aumentando, minimo=60, maximo=180):
+    """Atualiza o alpha e troca a direção ao atingir os limites."""
+    if alfa >= maximo:
+        alfa = maximo
+        aumentando = False
+    elif alfa <= minimo:
+        alfa = minimo
+        aumentando = True
+
+    alfa += 1 if aumentando else -1
+    return alfa, aumentando
 
 def executar_menu(tela, clock):
     """Executa o loop do menu principal"""
@@ -154,12 +208,36 @@ def executar_menu(tela, clock):
     titulo = pygame.transform.smoothscale(titulo,(largura_titulo, altura_titulo))
     titulo_ret = titulo.get_rect(center=(LARGURA_TELA // 2, 160))
 
+    # Config do sprite dos botões
+    btn_normal = pygame.image.load("assets/imagens/botao-sem-selecao.png").convert_alpha()
+    btn_hover = pygame.image.load("assets/imagens/botao-com-selecao.png").convert_alpha()
+    tamanho_botao = (200, 60)
+    btn_normal = pygame.transform.smoothscale(btn_normal, tamanho_botao)
+    btn_hover = pygame.transform.smoothscale(btn_hover, tamanho_botao)
+    fonte_menu = pygame.font.Font("assets/fontes/Asimovian/commando.ttf", 30)
+
+    centro_x = LARGURA_TELA // 2
+    botao_jogar = Botao(btn_normal, btn_hover, "JOGAR", fonte_menu, (centro_x, 335))
+    botao_config = Botao(btn_normal, btn_hover, "CONFIG", fonte_menu, (centro_x, 440))
+    botao_sair = Botao(btn_normal, btn_hover, "SAIR", fonte_menu, (centro_x, 545))
+
     # Gerar Flocos
     flocos_neve = gerar_flocos()
     alfa = 0
     aumentando = True
     while True:
-        conferir_inputs()
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                fechar_jogo()
+            elif evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_F11:
+                    pygame.display.toggle_fullscreen()
+                elif evento.key == pygame.K_ESCAPE:
+                    fechar_jogo()
+            elif botao_jogar.foi_clicado(evento):
+                return "jogo"
+            elif botao_sair.foi_clicado(evento):
+                fechar_jogo()
 
         tela.blit(imagem_fundo, (0, 0))
 
@@ -179,15 +257,13 @@ def executar_menu(tela, clock):
             pygame.draw.circle(tela, cor_neve, (int(floco[0]), int(floco[1])), floco[4])
             
         # Verifica a transparência do título
-        if alfa >= 180:
-            alfa = 180
-            aumentando = False
-        elif alfa <= 60:
-            alfa = 60
-            aumentando = True
-
-        alfa = variar_alfa(alfa, aumentando)
+        alfa, aumentando = variar_alfa(alfa, aumentando)
         titulo.set_alpha(alfa)
         tela.blit(titulo, titulo_ret)
+
+        #Cria os botões
+        botao_jogar.desenhar(tela)
+        botao_config.desenhar(tela)
+        botao_sair.desenhar(tela)
         pygame.display.flip()
         clock.tick(FPS)

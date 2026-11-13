@@ -39,4 +39,3 @@ def executar_jogo():
             estado_atual = executar_abertura(tela,clock)
         if estado_atual == "menu":
             estado_atual = executar_menu(tela,clock)
-        print(estado_atual)
