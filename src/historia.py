@@ -2,7 +2,12 @@ import random
 
 import pygame
 
-from src.config import LARGURA_TELA, ALTURA_TELA, FPS, VOLUME_MUSICA
+from src.dados import(
+    registrar_dados,
+    ler_dados
+)
+
+from src.config import LARGURA_TELA, ALTURA_TELA, FPS, VOLUME_MUSICA, DADOS
 from src.funcoes import fechar_jogo
 
 MUSICA_HISTORIA = "assets/sons/HistoryReading.mp3"
@@ -194,7 +199,7 @@ def mostrar_cena(tela, clock, caminho, legenda, indice, t_saida=T_SAIDA, t_parad
         clock.tick(FPS)
 
 
-def executar_historia(tela, clock):
+def executar_historia(tela, clock, dados, eh_botao):
     """
     Executa a história inteira: passa as cenas na ordem, cada uma com a sua legenda,
     animações de entrada e a música da história.
@@ -204,7 +209,9 @@ def executar_historia(tela, clock):
         clock (Clock): relógio usado para controlar o FPS.
 
     Saída:
-        bool: True quando todas as cenas terminarem.
+        Nada
+
+    OBS: Atualiza os dados da tela na memória
     """
     pygame.mixer.init()
     pygame.mixer.music.load(MUSICA_HISTORIA)
@@ -215,4 +222,10 @@ def executar_historia(tela, clock):
         mostrar_cena(tela, clock, caminho, legenda, indice)
 
     pygame.mixer.music.stop()
-    return "menu"
+
+    dados["historia"] = False
+    if eh_botao:
+        dados["tela"] = "menu"
+    else:
+        dados["tela"] = "jogo"
+    registrar_dados(dados,DADOS)

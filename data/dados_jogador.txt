@@ -1,0 +1,5 @@
+tela,abertura
+fase,1
+erros,0
+acertos,0
+historia,False

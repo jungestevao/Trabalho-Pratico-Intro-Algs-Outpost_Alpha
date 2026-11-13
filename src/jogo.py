@@ -8,6 +8,7 @@ from src.config import (
     TITULO_JOGO,
     CINZA,
     FONTE_TITULO,
+    DADOS
 )
 from src.funcoes import (
     fechar_jogo,
@@ -18,9 +19,9 @@ from src.historia import (
     executar_historia
 )
 from src.dados import(
+    iniciar_dados,
     ler_dados,
-    registrar_dados
-    
+    registrar_dados,
 )
 
 def executar_jogo():
@@ -36,13 +37,17 @@ def executar_jogo():
 
     estado_atual = "iniciando"
 
+    iniciar_dados(DADOS)
+
     while True:
 
         # Verificação de estado (mudança de telas)
+        estado_memoria = ler_dados(DADOS)
+        print(estado_memoria)
 
-        if estado_atual == "iniciando":
-            estado_atual = executar_abertura(tela,clock)
-        if estado_atual == "menu":
-            estado_atual = executar_menu(tela,clock)
-        if estado_atual == "jogo":
-            estado_atual = executar_historia(tela,clock)
+        if estado_memoria["tela"] == "abertura":
+            executar_abertura(tela,clock,estado_memoria)
+        elif estado_memoria["tela"] == "menu":
+            executar_menu(tela,clock,estado_memoria)
+        elif estado_memoria["tela"] == "historia":
+            executar_historia(tela,clock,estado_memoria, True)

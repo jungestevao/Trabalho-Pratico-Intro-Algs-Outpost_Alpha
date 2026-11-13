@@ -9,7 +9,9 @@ from src.config import (
     CINZA,
     VOLUME_MUSICA,
 )
-
+from src.dados import(
+    registrar_dados
+)
 class Botao:
     def __init__(self, img_normal_base, img_hover_base, texto, fonte, pos_centro):
         # 1. Prepara a imagem do estado NORMAL (com texto)
@@ -124,7 +126,7 @@ def mostrar_com_fade(tela, clock, imagem, rect, t_fadein=2000, t_parado=2000, t_
         pygame.display.update()
         clock.tick(FPS)
 
-def executar_abertura(tela,clock):
+def executar_abertura(tela,clock,dados):
     """
     Executa a animação de abertura do jogo
     
@@ -160,13 +162,17 @@ def executar_abertura(tela,clock):
 
     # Sequência de animações
     if mostrar_com_fade(tela, clock, logo_puc, rect_logo_puc) == "menu":
-        return "menu"
+        dados["tela"] = "menu"
+        return registrar_dados(dados)
     if mostrar_com_fade(tela, clock, logo_ES, rect_logo_ES) == "menu":
-        return "menu"
+        dados["tela"] = "menu"
+        return registrar_dados(dados)
     if mostrar_com_fade(tela, clock, logo_grupo, rect_logo_grupo) == "menu":
-        return "menu"
+        dados["tela"] = "menu"
+        return registrar_dados(dados)
 
-    return "menu"
+    dados["tela"] = "menu"
+    return registrar_dados(dados)
 
 
 def gerar_flocos():
@@ -194,7 +200,7 @@ def variar_alfa(alfa, aumentando, minimo=60, maximo=180):
     alfa += 1 if aumentando else -1
     return alfa, aumentando
 
-def executar_menu(tela, clock):
+def executar_menu(tela, clock, dados):
     """Executa o loop do menu principal"""
     # Config das imagens do menu
     imagem_fundo = pygame.image.load("assets/imagens/imagem-fundo-menu.jpg").convert()
@@ -214,6 +220,7 @@ def executar_menu(tela, clock):
     btn_hover = pygame.transform.smoothscale(btn_hover, tamanho_botao)
     fonte_menu = pygame.font.Font("assets/fontes/Asimovian/commando.ttf", 30)
 
+    # Config das variáveis do botão
     centro_x = LARGURA_TELA // 2
     botao_jogar = Botao(btn_normal, btn_hover, "JOGAR", fonte_menu, (centro_x, 335))
     botao_config = Botao(btn_normal, btn_hover, "CONFIG", fonte_menu, (centro_x, 440))
@@ -226,15 +233,24 @@ def executar_menu(tela, clock):
     while True:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
+                dados["tela"] = "abertura"
+                registrar_dados(dados)
                 fechar_jogo()
             elif evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_F11:
                     pygame.display.toggle_fullscreen()
                 elif evento.key == pygame.K_ESCAPE:
+                    dados["tela"] = "abertura"
+                    registrar_dados(dados)
                     fechar_jogo()
             elif botao_jogar.foi_clicado(evento):
-                return "jogo"
+                if dados["historia"]:
+                    dados["tela"] = "historia"
+                    registrar_dados(dados)
+                    return
             elif botao_sair.foi_clicado(evento):
+                dados["tela"] = "abertura"
+                registrar_dados(dados)
                 fechar_jogo()
 
         tela.blit(imagem_fundo, (0, 0))
@@ -242,7 +258,7 @@ def executar_menu(tela, clock):
         # 3. Atualiza e desenha CADA floco de neve
         for floco in flocos_neve:
             floco[1] += floco[2]  # Cai no eixo Y
-            floco[0] += floco[3]  # Move no eixo X (vento)
+            floco[0] += floco[3]  # Move no eixo X
         
             # Reset ao sair da tela 
             if floco[1] > ALTURA_TELA:

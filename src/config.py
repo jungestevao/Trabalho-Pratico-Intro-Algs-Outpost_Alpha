@@ -11,4 +11,4 @@ PRETO = (0, 0, 0)
 CINZA = (212,212,212)
 
 VOLUME_MUSICA = 0.8
-DADOS = "data/dados"
+DADOS = "data/dados_jogador.txt"

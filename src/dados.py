@@ -1,6 +1,29 @@
 import ast
+from src.config import DADOS
 
-def ler_dados(arquivo):
+def iniciar_dados(arquivo = DADOS):
+    """
+    Confere se existe um dicionário pra iniciar um ou não:
+
+    Parâmetros:
+        arquivo (str): Caminho do arquivo de dados
+    
+    Saída:
+        None
+    """
+    dic = {}
+    formato_dados = ["tela","abertura","fase", 1,"erros", 0,"acertos",0,"historia",True]
+
+    try:
+        with open(arquivo,"r",encoding="utf-8"):
+            print("Arquivo aberto")
+
+    except FileNotFoundError:
+        with open(arquivo,"w",encoding="utf-8")as arquivo:
+            for i in range(0, len(formato_dados),2):
+                  arquivo.write(f"{formato_dados[i]},{formato_dados[i+1]}\n")
+
+def ler_dados(arquivo = DADOS):
     """
     Lê os dados em data/dados_jogador.txt e transforma em dicionário.
 
@@ -11,26 +34,20 @@ def ler_dados(arquivo):
         (Dict): dicionário com o nome dos dados em chaves e seu valor atribuído.
     """
     dic = {}
-    formato_dados = ["fase", 1,"erros", 0,"acertos",0,"historia",True]
-    try:
-        with open(arquivo,"r",encoding="utf-8")as dados:
-            for linha in dados:
-                chave,dado = linha.strip().split(",")
 
-                try:
-                    dic[chave] = ast.literal_eval(dado)
-                except (ValueError, SyntaxError):
-                    dic[chave] = dado
+    with open(arquivo,"r",encoding="utf-8")as dados:
+        for linha in dados:
+            chave,dado = linha.strip().split(",")
+
+            try:
+                dic[chave] = ast.literal_eval(dado)
+            except (ValueError, SyntaxError):
+                dic[chave] = dado
                 
-
-    except FileNotFoundError:
-        with open(arquivo,"w",encoding="utf-8")as arquivo:
-            for i in range(0, len(formato_dados),2):
-                  dic[formato_dados[i]] = formato_dados[i+1]
 
     return dic
 
-def registrar_dados(dicionario,arquivo):
+def registrar_dados(dicionario,arquivo = DADOS):
     """
     Lê os dados do dicionário local e registra em arquivo
 
@@ -38,18 +55,10 @@ def registrar_dados(dicionario,arquivo):
         dicionário(dict): dicionário com os dados organizados.
     
     Saídas: 
-        Nada
+        None
 
     OBS: Após o fim da execução, o arquivo é atualizado.
     """
     with open(arquivo,"w",encoding="utf-8")as dados:
         for chave in dicionario.keys():
             dados.write(f"{chave},{dicionario[chave]}\n")
-
-from config import (
-    DADOS
-)
-
-dic = ler_dados(DADOS)
-print(dic)
-registrar_dados(dic,DADOS)
