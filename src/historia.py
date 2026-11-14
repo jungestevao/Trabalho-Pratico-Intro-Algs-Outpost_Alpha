@@ -5,10 +5,9 @@ from src.dados import(
     ler_dados
 )
 
-from src.config import LARGURA_TELA, ALTURA_TELA, FPS, VOLUME_MUSICA, DADOS
+from src.config import LARGURA_TELA, ALTURA_TELA, FPS, DADOS, MUSICA_HISTORIA
 from src.funcoes import conferir_inputs
 
-MUSICA_HISTORIA = "assets/sons/HistoryReading.mp3"
 
 # Tempos das animações (em milissegundos)
 T_ENTRADA = 700       # duração do deslize e fade-in da imagem
@@ -60,14 +59,14 @@ def _quebrar_texto(texto, fonte, largura_max):
     return linhas
 
 
-def _processar_eventos():
+def _processar_eventos(dados):
     """
     Processa os inputs globais durante a história.
 
     Saída:
         bool: True se a barra de espaço foi apertada (pula a cena atual).
     """
-    estado, _ = conferir_inputs()
+    estado, _ = conferir_inputs(dados)
     return estado == "menu"
 
 
@@ -88,7 +87,7 @@ def _letras_visiveis_por_linha(linhas, total_letras):
     return partes
 
 
-def mostrar_cena(tela, clock, caminho, legenda, indice):
+def mostrar_cena(tela, clock, caminho, legenda, indice, dados):
     """
     Mostra uma imagem fixa até o usuário pressionar Espaço.
     A legenda é digitada letra por letra enquanto a cena permanece na tela.
@@ -111,7 +110,7 @@ def mostrar_cena(tela, clock, caminho, legenda, indice):
     completar_fala = False     # espaço pediu para completar a fala agora
 
     while True:
-        if _processar_eventos():
+        if _processar_eventos(dados):
             if fala_completa:
                 break              # vai para a próxima cena
             completar_fala = True  # termina a legenda
@@ -169,11 +168,11 @@ def executar_historia(tela, clock, dados, eh_botao):
     """
     pygame.mixer.init()
     pygame.mixer.music.load(MUSICA_HISTORIA)
-    pygame.mixer.music.set_volume(VOLUME_MUSICA)
+    pygame.mixer.music.set_volume(dados["volume"])
     pygame.mixer.music.play()  # toca uma vez, sem repetir
 
     for indice, (caminho, legenda) in enumerate(CENAS):
-        mostrar_cena(tela, clock, caminho, legenda, indice)
+        mostrar_cena(tela, clock, caminho, legenda, indice, dados)
 
     pygame.mixer.music.fadeout(1)
     pygame.mixer.music.stop()

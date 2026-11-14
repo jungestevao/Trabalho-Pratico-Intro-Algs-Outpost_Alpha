@@ -11,10 +11,14 @@ BRANCO = (255, 255, 255)
 PRETO = (0, 0, 0)
 CINZA = (212,212,212)
 
-VOLUME_MUSICA = 0.8
 DADOS = "data/dados_jogador.txt"
 
-# Localização dos sprites
+# Caminho das musicas
+MUSICA_MENU = "assets/sons/MainTheme.mp3"
+MUSICA_HISTORIA = "assets/sons/HistoryReading.mp3"
+MUSICA_FIM_FASE = "assets/sons/ShiftConclusion.mp3"
+
+# Caminho dos sprites
 SPRITE_BTN_DESATIVO = "assets/imagens/botao-sem-selecao.png"
 SPRITE_BTN_ATIVO = "assets/imagens/botao-com-selecao.png"
 SPRITE_LOGO_JOGO = "assets/imagens/outpost-alpha.png"

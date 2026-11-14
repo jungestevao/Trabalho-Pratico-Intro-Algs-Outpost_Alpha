@@ -8,7 +8,6 @@ from src.config import (
     TITULO_JOGO,
     CINZA,
     FONTE_MENU,
-    VOLUME_MUSICA,
     SPRITE_BTN_ATIVO,
     SPRITE_BTN_DESATIVO,
     SPRITE_FUNDO_MENU,
@@ -16,6 +15,9 @@ from src.config import (
     SPRITE_LOGO_G3,
     SPRITE_LOGO_JOGO,
     SPRITE_LOGO_PUC,
+    MUSICA_FIM_FASE,
+    MUSICA_HISTORIA,
+    MUSICA_MENU
 )
 from src.dados import(
     registrar_dados
@@ -58,44 +60,49 @@ class Botao:
         return False
 
 
-def fechar_jogo():
+def fechar_jogo(dados):
     """ Finalizar a execução do jogo. """
+    dados["tela"] = "abertura"
+    registrar_dados(dados)
     pygame.quit()
     exit()
 
+def configurar_sprite_botao():
 
+    btn_normal = pygame.image.load(SPRITE_BTN_DESATIVO).convert_alpha()
+    btn_hover = pygame.image.load(SPRITE_BTN_ATIVO).convert_alpha()
+    tamanho_botao = (200, 60)
+    btn_normal = pygame.transform.smoothscale(btn_normal, tamanho_botao)
+    btn_hover = pygame.transform.smoothscale(btn_hover, tamanho_botao)
+    fonte_menu = pygame.font.Font(FONTE_MENU[0],FONTE_MENU[1])
 
-def executar_musica_menu():
+    return btn_normal,btn_hover,fonte_menu
+
+def executar_musica(dados,musica):
     """Executa a música do menu"""
     # Config música
 
     pygame.mixer.init()
-    pygame.mixer.music.load("assets/sons/MainTheme.mp3")
-    pygame.mixer.music.set_volume(VOLUME_MUSICA)
+    pygame.mixer.music.load(musica)
+    pygame.mixer.music.set_volume(dados["volume"])
 
     # Executar música
 
     pygame.mixer.music.play(-1)
 
-def conferir_inputs(dados=None):
+def conferir_inputs(dados):
     """Processa inputs globais e devolve eventos para a tela atual."""
     eventos_da_tela = []
     estado = None
 
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
-            if dados is not None:
-                dados["tela"] = "abertura"
-                registrar_dados(dados)
-            fechar_jogo()
+            fechar_jogo(dados)
         elif evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_F11:
                 pygame.display.toggle_fullscreen()
             elif evento.key == pygame.K_ESCAPE:
-                if dados is not None:
-                    dados["tela"] = "abertura"
-                    registrar_dados(dados)
-                fechar_jogo()
+                fechar_jogo(dados)
             elif evento.key == pygame.K_SPACE:
                 estado = "menu"
         else:
@@ -103,7 +110,7 @@ def conferir_inputs(dados=None):
 
     return estado, eventos_da_tela
 
-def mostrar_com_fade(tela, clock, imagem, rect, t_fadein=2000, t_parado=2000, t_fadeout=2000):
+def mostrar_com_fade(tela, clock, imagem, rect, dados, t_fadein=2000, t_parado=2000, t_fadeout=2000,):
     """Exibe qualquer Surface (imagem ou texto) com fade-in, pausa e fade-out."""
     tempo_inicio = pygame.time.get_ticks()
     
@@ -113,7 +120,7 @@ def mostrar_com_fade(tela, clock, imagem, rect, t_fadein=2000, t_parado=2000, t_
 
     while True:
         tela.fill((0, 0, 0))
-        estado, _ = conferir_inputs()
+        estado, _ = conferir_inputs(dados)
         if estado == "menu":
             return estado
 
@@ -143,29 +150,7 @@ def mostrar_com_fade(tela, clock, imagem, rect, t_fadein=2000, t_parado=2000, t_
 
         pygame.display.update()
         clock.tick(FPS)
-
-def executar_menu_config(tela,clock,dados):
-    """
-    Executa a tela de configurações em loop
-
-    Parâmetros: 
-    Tela (Object): Superficie principal criada na execução inicial do código.
-    Clock (Class): Classe referente a frequencia de execução.
-    Dados (Dict): Dicionário do estado do jogo.
- 
-    Saída: 
-        None
-    """
-    imagem_fundo = pygame.image.load(SPRITE_FUNDO_MENU).convert()
-    imagem_fundo = pygame.transform.scale(imagem_fundo, (LARGURA_TELA, ALTURA_TELA))
-
-    while True:
-        tela.blit(imagem_fundo,(0,0))
-
-        pygame.display.flip()
-        clock.tick(FPS)
-
-    btn_volume = Botao()
+    
 def executar_abertura(tela,clock,dados):
     """
     Executa a animação de abertura do jogo
@@ -200,16 +185,16 @@ def executar_abertura(tela,clock,dados):
     rect_logo_grupo = logo_grupo.get_rect(center=tela.get_rect().center)
 
     # Iniciar musica
-    executar_musica_menu()
+    executar_musica(dados, MUSICA_MENU)
 
     # Sequência de animações
-    if mostrar_com_fade(tela, clock, logo_puc, rect_logo_puc) == "menu":
+    if mostrar_com_fade(tela, clock, logo_puc, rect_logo_puc, dados) == "menu":
         dados["tela"] = "menu"
         return registrar_dados(dados)
-    if mostrar_com_fade(tela, clock, logo_ES, rect_logo_ES) == "menu":
+    if mostrar_com_fade(tela, clock, logo_ES, rect_logo_ES, dados) == "menu":
         dados["tela"] = "menu"
         return registrar_dados(dados)
-    if mostrar_com_fade(tela, clock, logo_grupo, rect_logo_grupo) == "menu":
+    if mostrar_com_fade(tela, clock, logo_grupo, rect_logo_grupo, dados) == "menu":
         dados["tela"] = "menu"
         return registrar_dados(dados)
 
@@ -238,6 +223,25 @@ def gerar_flocos():
 
     return flocos_neve
 
+def atualizar_flocos(tela, flocos_neve):
+    """Atualiza as posições e desenha os flocos de neve na tela."""
+    for floco in flocos_neve:
+        floco[1] += floco[2]
+        floco[0] += floco[3]
+
+        if floco[1] > ALTURA_TELA:
+            floco[1] = float(random.randint(-20, -5))
+            floco[0] = float(random.randint(0, LARGURA_TELA))
+            floco[2] = random.uniform(0.4, 1.0)
+
+        cor_neve = (180, 195, 210) if floco[4] == 1 else (230, 240, 255)
+        pygame.draw.circle(
+            tela,
+            cor_neve,
+            (int(floco[0]), int(floco[1])),
+            floco[4]
+        )
+
 def variar_alfa(alfa, aumentando, minimo=60, maximo=180):
     """
     Atualiza o alpha e troca a direção ao atingir os limites.
@@ -262,6 +266,66 @@ def variar_alfa(alfa, aumentando, minimo=60, maximo=180):
     alfa += 1 if aumentando else -1
     return alfa, aumentando
 
+def executar_menu_config(tela,clock,dados):
+    """
+    Executa a tela de configurações em loop
+
+    Parâmetros: 
+    Tela (Object): Superficie principal criada na execução inicial do código.
+    Clock (Class): Classe referente a frequencia de execução.
+    Dados (Dict): Dicionário do estado do jogo.
+ 
+    Saída: 
+        None
+    """
+    # Config imagem fundo config
+    imagem_fundo = pygame.image.load(SPRITE_FUNDO_MENU).convert()
+    imagem_fundo = pygame.transform.scale(imagem_fundo, (LARGURA_TELA, ALTURA_TELA))
+
+    centro = LARGURA_TELA/2
+    flocos = gerar_flocos()
+
+    # Config botões
+    btn_normal,btn_hover,fonte = configurar_sprite_botao()
+
+    btn_historia = Botao(btn_normal, btn_hover, "HISTORIA", fonte, (centro,300))
+    btn_sair = Botao(btn_normal, btn_hover, "SAIR", fonte, (centro,400))
+    while True:
+        btn_volume = Botao(
+            btn_normal,
+            btn_hover,
+            f"{int(dados['volume'] * 100)}",
+            fonte,
+            (centro, 200)
+        )
+        _, evento = conferir_inputs(dados)
+        tela.blit(imagem_fundo,(0,0))
+
+        # Config Inputs
+        for eventos in evento:
+            if btn_volume.foi_clicado(eventos):
+                if dados["volume"] >= 1.0:
+                    dados["volume"] = 0.0
+                else:
+                    dados["volume"] = round(dados["volume"] + 0.1, 1)
+                    
+                pygame.mixer.music.set_volume(dados["volume"])
+                registrar_dados(dados)
+            elif btn_sair.foi_clicado(eventos):
+                fechar_jogo(dados)
+            elif btn_historia.foi_clicado(eventos):
+                dados["tela"] = "historia-btn"
+                registrar_dados(dados)
+                return
+
+        btn_volume.desenhar(tela)
+        btn_historia.desenhar(tela)
+        btn_sair.desenhar(tela)
+
+        atualizar_flocos(tela,flocos)
+        pygame.display.flip()
+        clock.tick(FPS)
+
 def executar_menu(tela, clock, dados):
     """Executa o loop do menu principal"""
     # Config das imagens do menu
@@ -275,12 +339,7 @@ def executar_menu(tela, clock, dados):
     titulo_ret = titulo.get_rect(center=(LARGURA_TELA // 2, 160))
 
     # Config do sprite dos botões
-    btn_normal = pygame.image.load(SPRITE_BTN_DESATIVO).convert_alpha()
-    btn_hover = pygame.image.load(SPRITE_BTN_ATIVO).convert_alpha()
-    tamanho_botao = (200, 60)
-    btn_normal = pygame.transform.smoothscale(btn_normal, tamanho_botao)
-    btn_hover = pygame.transform.smoothscale(btn_hover, tamanho_botao)
-    fonte_menu = pygame.font.Font(FONTE_MENU)
+    btn_normal, btn_hover, fonte_menu = configurar_sprite_botao()
 
     # Config das variáveis do botão
     centro_x = LARGURA_TELA // 2
@@ -290,7 +349,7 @@ def executar_menu(tela, clock, dados):
 
     # Conferir se a música está ativa
     if not(pygame.mixer.music.get_busy()):
-        executar_musica_menu()
+        executar_musica(dados, MUSICA_MENU)
 
     # Gerar Flocos
     flocos_neve = gerar_flocos()
@@ -311,31 +370,18 @@ def executar_menu(tela, clock, dados):
                     return
                 else: 
                     dados["tela"] = "jogo"
+                    registrar_dados(dados)
+                    return
             elif botao_config.foi_clicado(evento):
                 dados["tela"] = "config"
                 registrar_dados(dados)
                 return
             elif botao_sair.foi_clicado(evento):
-                dados["tela"] = "abertura"
-                registrar_dados(dados)
-                fechar_jogo()
+                fechar_jogo(dados)
 
         tela.blit(imagem_fundo, (0, 0))
 
-        # 3. Atualiza e desenha CADA floco de neve
-        for floco in flocos_neve:
-            floco[1] += floco[2]  # Cai no eixo Y
-            floco[0] += floco[3]  # Move no eixo X
-        
-            # Reset ao sair da tela 
-            if floco[1] > ALTURA_TELA:
-                floco[1] = float(random.randint(-20, -5))
-                floco[0] = float(random.randint(0, LARGURA_TELA))
-                floco[2] = random.uniform(0.4, 1.0)    
-
-            # Desenha o floco 
-            cor_neve = (180, 195, 210) if floco[4] == 1 else (230, 240, 255)
-            pygame.draw.circle(tela, cor_neve, (int(floco[0]), int(floco[1])), floco[4])
+        atualizar_flocos(tela, flocos_neve)
             
         # Verifica a transparência do título
         alfa, aumentando = variar_alfa(alfa, aumentando)
@@ -346,5 +392,22 @@ def executar_menu(tela, clock, dados):
         botao_jogar.desenhar(tela)
         botao_config.desenhar(tela)
         botao_sair.desenhar(tela)
+        pygame.display.flip()
+        clock.tick(FPS)
+
+def executar_fases(tela,clock,dados):
+
+    fonte = pygame.font.Font(FONTE_MENU[0],20)
+    texto = fonte.render("EM DESENVOLVIMENTO - AGRADECEMOS SUA PACIENCIA!", True, "White")
+    rect_texto = texto.get_rect(center=(LARGURA_TELA / 2, ALTURA_TELA / 2))
+
+    executar_musica(dados,MUSICA_FIM_FASE)
+
+    while True:
+        conferir_inputs(dados)
+
+        tela.fill((0,0,0))
+        tela.blit(texto,rect_texto)
+
         pygame.display.flip()
         clock.tick(FPS)

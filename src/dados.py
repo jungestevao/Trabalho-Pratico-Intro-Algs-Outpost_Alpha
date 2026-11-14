@@ -12,7 +12,7 @@ def iniciar_dados(arquivo = DADOS):
         None
     """
     dic = {}
-    formato_dados = ["tela","abertura","fase", 1,"erros", 0,"acertos",0,"historia",True]
+    formato_dados = ["tela","abertura","fase", 1,"erros", 0,"acertos",0,"historia",True,"volume",0.8]
 
     try:
         with open(arquivo,"r",encoding="utf-8"):

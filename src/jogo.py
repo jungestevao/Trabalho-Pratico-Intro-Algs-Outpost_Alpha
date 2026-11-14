@@ -14,7 +14,8 @@ from src.funcoes import (
     fechar_jogo,
     executar_abertura,
     executar_menu,
-    executar_menu_config
+    executar_menu_config,
+    executar_fases
 )
 from src.historia import (
     executar_historia
@@ -36,8 +37,6 @@ def executar_jogo():
 
     pygame.display.set_caption(TITULO_JOGO)
 
-    estado_atual = "iniciando"
-
     iniciar_dados(DADOS)
 
     while True:
@@ -51,6 +50,10 @@ def executar_jogo():
         elif estado_memoria["tela"] == "menu":
             executar_menu(tela,clock,estado_memoria)
         elif estado_memoria["tela"] == "historia":
-            executar_historia(tela,clock,estado_memoria, True)
+            executar_historia(tela,clock,estado_memoria, False)
         elif estado_memoria["tela"] == "config":
             executar_menu_config(tela,clock,estado_memoria)
+        elif estado_memoria["tela"] == "historia-btn":
+            executar_historia(tela,clock,estado_memoria, True)
+        elif estado_memoria["tela"] == "jogo":
+            executar_fases(tela,clock,estado_memoria)
