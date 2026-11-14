@@ -3,4 +3,4 @@ fase,1
 erros,0
 acertos,0
 historia,False
-volume,0.6
+volume,0.5

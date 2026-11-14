@@ -285,11 +285,11 @@ def executar_menu_config(tela,clock,dados):
     centro = LARGURA_TELA/2
     flocos = gerar_flocos()
 
-    # Config botões
+    # Configs botões
     btn_normal,btn_hover,fonte = configurar_sprite_botao()
 
     btn_historia = Botao(btn_normal, btn_hover, "HISTORIA", fonte, (centro,300))
-    btn_sair = Botao(btn_normal, btn_hover, "SAIR", fonte, (centro,400))
+    btn_sair = Botao(btn_normal, btn_hover, "MENU", fonte, (centro,400))
     while True:
         btn_volume = Botao(
             btn_normal,
@@ -312,7 +312,9 @@ def executar_menu_config(tela,clock,dados):
                 pygame.mixer.music.set_volume(dados["volume"])
                 registrar_dados(dados)
             elif btn_sair.foi_clicado(eventos):
-                fechar_jogo(dados)
+                dados["tela"] = "menu"
+                registrar_dados(dados)
+                return
             elif btn_historia.foi_clicado(eventos):
                 dados["tela"] = "historia-btn"
                 registrar_dados(dados)
