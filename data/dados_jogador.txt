@@ -1,4 +1,4 @@
-tela,abertura
+tela,config
 fase,1
 erros,0
 acertos,0

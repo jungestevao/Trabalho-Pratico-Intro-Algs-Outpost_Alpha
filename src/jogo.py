@@ -13,7 +13,8 @@ from src.config import (
 from src.funcoes import (
     fechar_jogo,
     executar_abertura,
-    executar_menu
+    executar_menu,
+    executar_menu_config
 )
 from src.historia import (
     executar_historia
@@ -51,3 +52,5 @@ def executar_jogo():
             executar_menu(tela,clock,estado_memoria)
         elif estado_memoria["tela"] == "historia":
             executar_historia(tela,clock,estado_memoria, True)
+        elif estado_memoria["tela"] == "config":
+            executar_menu_config(tela,clock,estado_memoria)

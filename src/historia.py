@@ -1,5 +1,3 @@
-import random
-
 import pygame
 
 from src.dados import(
@@ -8,16 +6,13 @@ from src.dados import(
 )
 
 from src.config import LARGURA_TELA, ALTURA_TELA, FPS, VOLUME_MUSICA, DADOS
-from src.funcoes import fechar_jogo
+from src.funcoes import conferir_inputs
 
 MUSICA_HISTORIA = "assets/sons/HistoryReading.mp3"
 
 # Tempos das animações (em milissegundos)
-T_ENTRADA = 900        # imagem desliza e aparece
-T_TRANSICAO = 180      # rápido "tremor" de quadro ao trocar de cena
+T_ENTRADA = 700       # duração do deslize e fade-in da imagem
 T_DIGITACAO = 45       # tempo por letra da legenda
-T_PARADO = 4500        # tempo com a cena parada
-T_SAIDA = 900          # fade-out ao final da cena
 
 
 # Cenas na ordem da história: (imagem, legenda do roteiro)
@@ -67,23 +62,13 @@ def _quebrar_texto(texto, fonte, largura_max):
 
 def _processar_eventos():
     """
-    Lê os eventos do teclado e do mouse durante a história.
+    Processa os inputs globais durante a história.
 
     Saída:
         bool: True se a barra de espaço foi apertada (pula a cena atual).
     """
-    pular = False
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            fechar_jogo()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_F11:
-                pygame.display.toggle_fullscreen()
-            if event.key == pygame.K_ESCAPE:
-                fechar_jogo()
-            if event.key == pygame.K_SPACE:
-                pular = True
-    return pular
+    estado, _ = conferir_inputs()
+    return estado == "menu"
 
 
 def _ease_out(t):
@@ -103,17 +88,14 @@ def _letras_visiveis_por_linha(linhas, total_letras):
     return partes
 
 
-def mostrar_cena(tela, clock, caminho, legenda, indice, t_saida=T_SAIDA, t_parado=T_PARADO):
+def mostrar_cena(tela, clock, caminho, legenda, indice):
     """
-    Mostra uma cena com:
-      - entrada: a imagem desliza (alternando esquerda e direita) e aparece;
-      - transição: um tremor curto de quadro no começo da cena;
-      - legenda: digitada letra por letra, com cursor piscando;
-      - saída: fade-out ao final.
+    Mostra uma imagem fixa até o usuário pressionar Espaço.
+    A legenda é digitada letra por letra enquanto a cena permanece na tela.
     """
     img, rect_final = _preparar_imagem(caminho, tela)
     direcao = -1 if indice % 2 == 0 else 1
-    distancia = LARGURA_TELA * 0.25
+    distancia = tela.get_width() * 0.18
 
     fonte = pygame.font.Font(None, 28)
     altura_linha = fonte.get_linesize()
@@ -123,11 +105,7 @@ def mostrar_cena(tela, clock, caminho, legenda, indice, t_saida=T_SAIDA, t_parad
     caixa = pygame.Surface((LARGURA_TELA, altura_caixa))
     caixa.fill((0, 0, 0))
 
-    inicio_digitacao = T_ENTRADA // 2
-    duracao_digitacao = total_letras * T_DIGITACAO
-    total = T_ENTRADA + t_parado + t_saida
     inicio = pygame.time.get_ticks()
-    rnd = random.Random(indice)
 
     fala_completa = False      # a legenda já foi escrita por inteiro
     completar_fala = False     # espaço pediu para completar a fala agora
@@ -135,49 +113,25 @@ def mostrar_cena(tela, clock, caminho, legenda, indice, t_saida=T_SAIDA, t_parad
     while True:
         if _processar_eventos():
             if fala_completa:
-                break          # espaço com a fala completa: pula para a próxima cena
-            completar_fala = True  # espaço durante a digitação: completa a fala
+                break              # vai para a próxima cena
+            completar_fala = True  # termina a legenda
 
         decorrido = pygame.time.get_ticks() - inicio
-        if decorrido >= total:
-            break
-
-        # Entrada: deslize e fade-in
-        if decorrido < T_ENTRADA:
-            progresso = _ease_out(decorrido / T_ENTRADA)
-            alpha_img = int(255 * progresso)
-            deslocamento = int(direcao * distancia * (1 - progresso))
-        # Parado
-        elif decorrido < T_ENTRADA + t_parado:
-            alpha_img = 255
-            deslocamento = 0
-        # Saída: fade-out
-        else:
-            alpha_img = int(255 * (total - decorrido) / t_saida)
-            deslocamento = 0
-        alpha_img = max(0, min(255, alpha_img))
 
         tela.fill((0, 0, 0))
 
-        rect = rect_final.move(deslocamento, 0)
-        img_atual = img.copy()
-        img_atual.set_alpha(alpha_img)
-        tela.blit(img_atual, rect)
-
-        # Transição: tremor de quadro no começo da cena
-        if decorrido < T_TRANSICAO:
-            for _ in range(6):
-                y = rnd.randrange(0, ALTURA_TELA)
-                altura = rnd.randrange(4, 18)
-                faixa = tela.subsurface((0, y, LARGURA_TELA, min(altura, ALTURA_TELA - y))).copy()
-                tela.blit(faixa, (rnd.randrange(-25, 25), y))
+        progresso_entrada = _ease_out(decorrido / T_ENTRADA)
+        deslocamento = int(direcao * distancia * (1 - progresso_entrada))
+        imagem_atual = img.copy()
+        imagem_atual.set_alpha(int(255 * progresso_entrada))
+        tela.blit(imagem_atual, rect_final.move(deslocamento, 0))
 
         # Legenda: digitada letra por letra
-        alpha_texto = max(0, min(255, alpha_img))
-        caixa.set_alpha(int(alpha_texto * 0.6))
+        alpha_texto = 255
+        caixa.set_alpha(153)
         tela.blit(caixa, (0, ALTURA_TELA - altura_caixa))
 
-        letras = int((decorrido - inicio_digitacao) / T_DIGITACAO) if decorrido > inicio_digitacao else 0
+        letras = min(int(decorrido / T_DIGITACAO), total_letras)
         if completar_fala:
             letras = total_letras
         letras = min(letras, total_letras)
@@ -221,6 +175,7 @@ def executar_historia(tela, clock, dados, eh_botao):
     for indice, (caminho, legenda) in enumerate(CENAS):
         mostrar_cena(tela, clock, caminho, legenda, indice)
 
+    pygame.mixer.music.fadeout(1)
     pygame.mixer.music.stop()
 
     dados["historia"] = False

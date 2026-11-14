@@ -7,7 +7,15 @@ from src.config import (
     FPS,
     TITULO_JOGO,
     CINZA,
-    VOLUME_MUSICA
+    FONTE_MENU,
+    VOLUME_MUSICA,
+    SPRITE_BTN_ATIVO,
+    SPRITE_BTN_DESATIVO,
+    SPRITE_FUNDO_MENU,
+    SPRITE_LOGO_ES,
+    SPRITE_LOGO_G3,
+    SPRITE_LOGO_JOGO,
+    SPRITE_LOGO_PUC,
 )
 from src.dados import(
     registrar_dados
@@ -69,21 +77,31 @@ def executar_musica_menu():
 
     pygame.mixer.music.play(-1)
 
-def conferir_inputs():     
+def conferir_inputs(dados=None):
+    """Processa inputs globais e devolve eventos para a tela atual."""
+    eventos_da_tela = []
+    estado = None
 
-    for event in pygame.event.get():
-        #Fecha o jogo ao clicar no (X) em tela janela
-        if event.type == pygame.QUIT:
+    for evento in pygame.event.get():
+        if evento.type == pygame.QUIT:
+            if dados is not None:
+                dados["tela"] = "abertura"
+                registrar_dados(dados)
             fechar_jogo()
-        if event.type == pygame.KEYDOWN:
-            # Alterna tela cheia ao apertar F11
-            if event.key == pygame.K_F11:
+        elif evento.type == pygame.KEYDOWN:
+            if evento.key == pygame.K_F11:
                 pygame.display.toggle_fullscreen()
-            # Sai do jogo ao apertar ESC
-            if event.key == pygame.K_ESCAPE:
+            elif evento.key == pygame.K_ESCAPE:
+                if dados is not None:
+                    dados["tela"] = "abertura"
+                    registrar_dados(dados)
                 fechar_jogo()
-            if event.key == pygame.K_SPACE:
-                return "menu"
+            elif evento.key == pygame.K_SPACE:
+                estado = "menu"
+        else:
+            eventos_da_tela.append(evento)
+
+    return estado, eventos_da_tela
 
 def mostrar_com_fade(tela, clock, imagem, rect, t_fadein=2000, t_parado=2000, t_fadeout=2000):
     """Exibe qualquer Surface (imagem ou texto) com fade-in, pausa e fade-out."""
@@ -95,7 +113,7 @@ def mostrar_com_fade(tela, clock, imagem, rect, t_fadein=2000, t_parado=2000, t_
 
     while True:
         tela.fill((0, 0, 0))
-        estado = conferir_inputs()
+        estado, _ = conferir_inputs()
         if estado == "menu":
             return estado
 
@@ -126,15 +144,39 @@ def mostrar_com_fade(tela, clock, imagem, rect, t_fadein=2000, t_parado=2000, t_
         pygame.display.update()
         clock.tick(FPS)
 
+def executar_menu_config(tela,clock,dados):
+    """
+    Executa a tela de configurações em loop
+
+    Parâmetros: 
+    Tela (Object): Superficie principal criada na execução inicial do código.
+    Clock (Class): Classe referente a frequencia de execução.
+    Dados (Dict): Dicionário do estado do jogo.
+ 
+    Saída: 
+        None
+    """
+    imagem_fundo = pygame.image.load(SPRITE_FUNDO_MENU).convert()
+    imagem_fundo = pygame.transform.scale(imagem_fundo, (LARGURA_TELA, ALTURA_TELA))
+
+    while True:
+        tela.blit(imagem_fundo,(0,0))
+
+        pygame.display.flip()
+        clock.tick(FPS)
+
+    btn_volume = Botao()
 def executar_abertura(tela,clock,dados):
     """
     Executa a animação de abertura do jogo
     
     Parâmetros: 
         Tela (Object): Superficie principal criada na execução inicial do código.
-
+        Clock (Class): Classe referente a frequencia de execução.
+        Dados (Dict): Dicionário do estado do jogo.
+ 
     Saída: 
-        str: String referente ao estado do jogo após o fim da execução.
+        None
     """
     # Config fonte texto
     fonte_texto = pygame.font.Font(None, 50)
@@ -142,18 +184,18 @@ def executar_abertura(tela,clock,dados):
     texto_ret = texto.get_rect(midtop = (400, 100))
 
     # Config logo puc
-    logo_puc = pygame.image.load("assets/imagens/brasao-pucminas.png").convert_alpha()
+    logo_puc = pygame.image.load(SPRITE_LOGO_PUC).convert_alpha()
     rect_logo_puc = logo_puc.get_rect(center=tela.get_rect().center) # Liga a logo ao retângulo ligado ao centro da tela
 
     # Config logo eng.software
-    logo_ES = pygame.image.load("assets/imagens/Logo_ES_negativo@4x-1.png").convert_alpha()
+    logo_ES = pygame.image.load(SPRITE_LOGO_ES).convert_alpha()
     largura_alvo = int(tela.get_width() * 0.50) # Define a largura como 50% da largura da tela
     altura_alvo = int(largura_alvo * (logo_ES.get_height() / logo_ES.get_width())) # Calcula a altura exata mantendo a proporção
     logo_ES = pygame.transform.smoothscale(logo_ES, (largura_alvo, altura_alvo)) # Redimensiona com suavização (ideal para imagens grandes reduzidas)
     rect_logo_ES = logo_ES.get_rect(center=tela.get_rect().center)
 
     # Config logo Grupo 3
-    logo_grupo = pygame.image.load("assets/imagens/logo-grupo-3.png").convert_alpha()
+    logo_grupo = pygame.image.load(SPRITE_LOGO_G3).convert_alpha()
     logo_grupo = pygame.transform.smoothscale(logo_grupo,(largura_alvo,altura_alvo))
     rect_logo_grupo = logo_grupo.get_rect(center=tela.get_rect().center)
 
@@ -223,22 +265,22 @@ def variar_alfa(alfa, aumentando, minimo=60, maximo=180):
 def executar_menu(tela, clock, dados):
     """Executa o loop do menu principal"""
     # Config das imagens do menu
-    imagem_fundo = pygame.image.load("assets/imagens/imagem-fundo-menu.jpg").convert()
+    imagem_fundo = pygame.image.load(SPRITE_FUNDO_MENU).convert()
     imagem_fundo = pygame.transform.scale(imagem_fundo, (LARGURA_TELA, ALTURA_TELA))
     # Config do sprite do título
-    titulo = pygame.image.load("assets/imagens/outpost-alpha.png").convert_alpha()
+    titulo = pygame.image.load(SPRITE_LOGO_JOGO).convert_alpha()
     largura_titulo = 600
     altura_titulo = int(largura_titulo * titulo.get_height() / titulo.get_width())
     titulo = pygame.transform.smoothscale(titulo,(largura_titulo, altura_titulo))
     titulo_ret = titulo.get_rect(center=(LARGURA_TELA // 2, 160))
 
     # Config do sprite dos botões
-    btn_normal = pygame.image.load("assets/imagens/botao-sem-selecao.png").convert_alpha()
-    btn_hover = pygame.image.load("assets/imagens/botao-com-selecao.png").convert_alpha()
+    btn_normal = pygame.image.load(SPRITE_BTN_DESATIVO).convert_alpha()
+    btn_hover = pygame.image.load(SPRITE_BTN_ATIVO).convert_alpha()
     tamanho_botao = (200, 60)
     btn_normal = pygame.transform.smoothscale(btn_normal, tamanho_botao)
     btn_hover = pygame.transform.smoothscale(btn_hover, tamanho_botao)
-    fonte_menu = pygame.font.Font("assets/fontes/Asimovian/commando.ttf", 30)
+    fonte_menu = pygame.font.Font(FONTE_MENU)
 
     # Config das variáveis do botão
     centro_x = LARGURA_TELA // 2
@@ -252,28 +294,27 @@ def executar_menu(tela, clock, dados):
 
     # Gerar Flocos
     flocos_neve = gerar_flocos()
+
+    # Variárveis iniciais título
     alfa = 0
     aumentando = True
+
     while True:
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                dados["tela"] = "abertura"
-                registrar_dados(dados)
-                fechar_jogo()
-            elif evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_F11:
-                    pygame.display.toggle_fullscreen()
-                elif evento.key == pygame.K_ESCAPE:
-                    dados["tela"] = "abertura"
-                    registrar_dados(dados)
-                    fechar_jogo()
-            elif botao_jogar.foi_clicado(evento):
+        # Config Inputs
+        _, eventos = conferir_inputs(dados)
+        for evento in eventos:
+            if botao_jogar.foi_clicado(evento):
                 if dados["historia"]:
                     dados["tela"] = "historia"
                     registrar_dados(dados)
+                    pygame.mixer.music.fadeout(1)
                     return
                 else: 
                     dados["tela"] = "jogo"
+            elif botao_config.foi_clicado(evento):
+                dados["tela"] = "config"
+                registrar_dados(dados)
+                return
             elif botao_sair.foi_clicado(evento):
                 dados["tela"] = "abertura"
                 registrar_dados(dados)
