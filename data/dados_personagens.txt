@@ -1,0 +1,241 @@
+20
+10
+nome:Marcos Silva
+passou:False
+humano:True
+falas:Por favor abre essa porta! Vim do Setor Sul e nao sinto os meus dedos., Nasci em 1994 e trabalhava na manutencao da hidroeletrica antes da Dissonancia., Perdi peso nestes meses a fugir pelas ruinas mas o meu registro 4092-A esta limpo!
+temp_base:35
+temp_max:37
+freq_base:88
+freq_maxim:128
+identidade:4092-A, Marcos Silva, Olheiras profundas e cicatriz no queixo, 78, Setor Sul, 14/05/1994
+registro:4092-A, Marcos Silva, Setor Sul, 14/05/1994, 78, Tecnico de Hidroeletrica, Sobrevivente Civil sem anomalias
+Peso:71
+
+nome: Elena Vance
+passou: False
+humano: False
+falas: Socorro. Preciso entrar em Outpost Alpha imediatamente. O frio causa dor nivel 8., Eu nasci no Setor Norte no ano de 1998. O meu numero de cidada e 8810-B., Eu sou totalmente biologica. Pesar mais na balanca deve ser gelo acumulado no meu casaco.
+temp_base: 31
+temp_max: 31
+freq_base: 60
+freq_maxim: 60
+identidade: 8810-B, Elena Vance, Rosto simetrico e olhar fixo sem piscar, 58, Setor Norte, 22/11/1998
+registro: 8810-B, Elena Vance, Setor Norte, 22/11/1998, 58, Arquivista, Cidada original dada como morta no inverno passado
+Peso: 108
+
+nome: Jonas Ribeiro
+passou: False
+humano: False
+falas: Moco me ajuda! As maquinas atacaram o meu grupo perto do viaduto leste!, Eu sou o Jonas do Distrito Industrial! Trabalhei a vida toda na fundicao de aco!, Por que voce ligou o aquecedor da cabine?! O meu nucleo... digo a minha cabeca esta fervendo!
+temp_base: 36
+temp_max: 46
+freq_base: 75
+freq_maxim: 220
+identidade: 1104-C, Jonas Ribeiro, Barba espessa e casaco termico rasgado, 82, Setor Agricola, 03/02/1987
+registro: 1104-C, Jonas Ribeiro, Setor Agricola, 03/02/1987, 82, Botanico, Nunca trabalhou no Distrito Industrial
+Peso: 115
+
+nome: Clara Mendes
+passou: False
+humano: True
+falas: Deixa-me entrar por favor! Trouxe medicamentos que recolhi na clinica antiga., O meu registro e 5531-D. Era enfermeira na Zona Central antes de tudo queimar., Estou com um pouco de febre por causa de um corte no braco mas nao sou uma Replica!
+temp_base: 37
+temp_max: 38
+freq_base: 92
+freq_maxim: 134
+identidade: 5531-D, Clara Mendes, Cabelo curto grisalho e atadura no braco direito, 64, Zona Central, 09/08/1985
+registro: 5531-D, Clara Mendes, Zona Central, 09/08/1985, 64, Enfermeira Chefe, Procura-se viva para apoio medico
+Peso: 59
+
+nome: Artur Kovic
+passou: False
+humano: False
+falas: Boa noite Inspetor. Solicito abrigo conforme o protocolo de sobrevivencia humana., Sou natural de Outpost Beta e nasci em 12/01/1990 como consta no meu documento 9002-F., Nao ha contradicoes no meu depoimento. O meu batimento cardiaco e perfeitamente estavel.
+temp_base: 36
+temp_max: 44
+freq_base: 72
+freq_maxim: 72
+identidade: 9002-F, Artur Kovic, Expressao calma e postura rigida, 75, Vale das Cinzas, 12/01/1990
+registro: 9002-F, Artur Kovic, Vale das Cinzas, 12/01/1990, 75, Engenheiro de Redes, Nota do Conselho informa que Outpost Beta nunca existiu
+Peso: 119
+
+nome: Sofia Costa
+passou: False
+humano: True
+falas: Abre logo! Ouvi passos daquelas coisas atras de mim na tempestade!, Sou a Sofia do Setor Sul! Nasci em 30/07/2003 e o meu codigo e 7741-E!, Estou tremendo tanto de frio que mal consigo segurar o cartao de identificacao!
+temp_base: 35
+temp_max: 36
+freq_base: 105
+freq_maxim: 145
+identidade: 7741-E, Sofia Costa, Jovem palida com capuz coberto de neve, 55, Setor Sul, 30/07/2003
+registro: 7741-E, Sofia Costa, Setor Sul, 30/07/2003, 55, Estudante de Radio, Sem anomalias registradas
+Peso: 50
+
+nome: Davi Alencar
+passou: False
+humano: True
+falas: Calma eu nao estou armado! So quero sair dessa nevasca maldita!, Meu nome e Davi Alencar do Distrito Industrial e meu registro e 3319-G., Trabalhei como soldador nas muralhas de Outpost Alpha antes de ficar preso la fora!
+temp_base: 36
+temp_max: 37
+freq_base: 84
+freq_maxim: 118
+identidade: 3319-G, Davi Alencar, Queimadura antiga no pescoco e maos calejadas, 88, Distrito Industrial, 25/03/1982
+registro: 3319-G, Davi Alencar, Distrito Industrial, 25/03/1982, 88, Soldador Estrutural, Autorizado a retornar ao posto
+Peso: 81
+
+nome: Beatriz Moura
+passou: False
+humano: False
+falas: Por favor me ajude! Eu perdi minha familia quando o Setor Leste caiu!, Meu codigo e 6120-H e eu era professora infantil nascida em 19/09/1995., Esta fazendo tanto frio que meu sangue parece congelado nas veias!
+temp_base: 28
+temp_max: 29
+freq_base: 65
+freq_maxim: 65
+identidade: 6120-H, Beatriz Moura, Casaco longo escuro e voz monotona, 62, Setor Leste, 19/09/1992
+registro: 6120-H, Beatriz Moura, Setor Leste, 19/09/1992, 62, Quimica Industrial, Inconsistencia de data e profissao detectada
+Peso: 104
+
+nome: Lucas Ferraz
+passou: False
+humano: True
+falas: Inspetor me escuta! Eu consegui escapar de uma patrulha de Replicas no tunel do metro!, Sou Lucas Ferraz portador do registro 2048-J nascido em 11/12/1999 no Setor Norte., Corri por quase duas horas na neve sem parar por isso meu coracao esta disparado!
+temp_base: 37
+temp_max: 38
+freq_base: 110
+freq_maxim: 152
+identidade: 2048-J, Lucas Ferraz, Respiracao ofegante e oculos trincados, 72, Setor Norte, 11/12/1999
+registro: 2048-J, Lucas Ferraz, Setor Norte, 11/12/1999, 72, Mensageiro Urbano, Ficha limpa e sinais vitais compativeis com esforco fisico
+Peso: 67
+
+nome: Helena Novak
+passou: False
+humano: False
+falas: Abra a comporta imediatamente. Sou uma medica importante da Zona Central., Meu registro e 9940-K e minha data de nascimento e 05/04/1980., Meu peso elevado na balanca deve-se ao equipamento cirurgico que carrego na mochila.
+temp_base: 36
+temp_max: 47
+freq_base: 80
+freq_maxim: 240
+identidade: 9940-K, Helena Novak, Postura ereta sem nenhuma mochila visivel, 60, Zona Central, 05/04/1980
+registro: 9940-K, Helena Novak, Zona Central, 05/04/1980, 60, Cirurgia Geral, Camaras externas informam que a visitante nao carrega bagagem
+Peso: 114
+
+nome: Gabriel Torres
+passou: False
+humano: True
+falas: Pelo amor de Deus nao acione o incinerador! Eu sou humano de carne e osso!, Me chamo Gabriel Torres do Setor Agricola e meu documento e 1582-L., Nasci em 08/06/2001 e cuidava das estufas subterraneas antes do blecaute!
+temp_base: 35
+temp_max: 37
+freq_base: 90
+freq_maxim: 130
+identidade: 1582-L, Gabriel Torres, Roupas sujas de terra seca e fuligem, 74, Setor Agricola, 08/06/2001
+registro: 1582-L, Gabriel Torres, Setor Agricola, 08/06/2001, 74, Auxiliar de Estufa, Registro ativo e verificado
+Peso: 69
+
+nome: Valeria Klein
+passou: False
+humano: False
+falas: Socorro! Estou sentindo medo verdadeiro e tristeza profunda nivel maximo!, Sou Valeria Klein nascida em 17/10/1991 na Zona Sul com registro 4401-M., Trabalhei como operadora de radar e preciso de calor humano urgente.
+temp_base: 33
+temp_max: 33
+freq_base: 55
+freq_maxim: 55
+identidade: 4401-M, Valeria Klein, Movimentos repetitivos de cabeca, 59, Zona Central, 17/10/1991
+registro: 4401-M, Valeria Klein, Zona Central, 17/10/1991, 59, Operadora de Radar, Modelo infiltrador imitando emocoes por palavras-chave
+Peso: 60
+
+nome: Renato Barros
+passou: False
+humano: True
+falas: Ei tem alguem ai dentro?! O vento la fora esta cortando a pele!, Sou Renato Barros ex-bombeiro do Setor Leste registro numero 7290-N., Nasci em 21/01/1978 e carrego uma chapa de titano na perna desde o desabamento do hospital!
+temp_base: 36
+temp_max: 37
+freq_base: 82
+freq_maxim: 120
+identidade: 7290-N, Renato Barros, Manca da perna esquerda e usa bengala improvisada, 85, Setor Leste, 21/01/1978
+registro: 7290-N, Renato Barros, Setor Leste, 21/01/1978, 85, Bombeiro Civil, Historico medico confirma protese ortopedica leve de 2kg
+Peso: 80
+
+nome: Camila Duarte
+passou: False
+humano: False
+falas: Por favor deixa eu entrar! Eu vim caminhando desde o Vale das Cinzas!, Meu nome e Camila Duarte nascida em 02/12/2000 e meu codigo e 3099-P., Eu trabalhava na biblioteca municipal catalogando livros antigos!
+temp_base: 36
+temp_max: 45
+freq_base: 88
+freq_maxim: 198
+identidade: 3099-P, Camila Duarte, Dedos com articulacoes rigidas sob as luvas, 54, Setor Norte, 02/12/2000
+registro: 3099-P, Camila Duarte, Setor Norte, 02/12/2000, 54, Eletricista de Rede, Dados de cidade e profissao divergem totalmente do depoimento
+Peso: 98
+
+nome: Mateus Viana
+passou: False
+humano: True
+falas: Abre essa porta cara! Faz tres dias que eu so como neve derretida!, Sou o Mateus Viana do Vale das Cinzas nascido em 15/04/1996 registro 8371-Q., Eu era mecanico de geradores a diesel antes das maquinas tomarem a subestacao!
+temp_base: 35
+temp_max: 36
+freq_base: 86
+freq_maxim: 126
+identidade: 8371-Q, Mateus Viana, Rosto magro sujo de graxa e barba por fazer, 80, Vale das Cinzas, 15/04/1996
+registro: 8371-Q, Mateus Viana, Vale das Cinzas, 15/04/1996, 80, Mecanico de Geradores, Desnutricao severa compativel com perda de 9kg
+Peso: 71
+
+nome: Igor Petrov
+passou: False
+humano: False
+falas: Inspetor abra o portao. Minha integridade biologica esta em risco severo., Sou Igor Petrov do Distrito Industrial nascido em 28/08/1984 registro 5012-R., Sempre trabalhei como padeiro comunitario distribuindo alimentos no meu setor.
+temp_base: 30
+temp_max: 48
+freq_base: 70
+freq_maxim: 210
+identidade: 5012-R, Igor Petrov, Cicatriz cirurgica reta na nuca e olhar vazio, 90, Distrito Industrial, 28/08/1984
+registro: 5012-R, Igor Petrov, Distrito Industrial, 28/08/1984, 90, Pesquisador de Robotica, Cidadao faleceu no dia da Dissonancia
+Peso: 132
+
+nome: Livia Teixeira
+passou: False
+humano: True
+falas: Moço me escuta! Minha irma ja entrou em Outpost Alpha ontem!, Sou Livia Teixeira da Zona Central nascida em 07/11/2002 registro 6654-S., Eu ajudava na triagem de suprimentos alimentares antes da evacuacao!
+temp_base: 36
+temp_max: 37
+freq_base: 95
+freq_maxim: 138
+identidade: 6654-S, Livia Teixeira, Casaco acolchoado cinza e cachecol vermelho, 61, Zona Central, 07/11/2002
+registro: 6654-S, Livia Teixeira, Zona Central, 07/11/2002, 61, Auxiliar de Logistica, Irmandade confirmada no censo interno do refugio
+Peso: 56
+
+nome: Samuel Nogueira
+passou: False
+humano: False
+falas: Me tira daqui! As vozes na estatica nao param de gritar na minha cabeca!, Meu nome e Samuel Nogueira do Setor Sul nascido em 14/02/1993 codigo 2287-T., Eu sou um relojoeiro humano comum e meu coracao bate como qualquer outro!
+temp_base: 36
+temp_max: 36
+freq_base: 60
+freq_maxim: 60
+identidade: 2287-T, Samuel Nogueira, Tremedeira ritmica exata a cada dois segundos, 70, Setor Sul, 14/02/1993
+registro: 2287-T, Samuel Nogueira, Setor Sul, 14/02/1993, 70, Relojoeiro, Temperatura e frequencia cardiaca travadas em loop matematico
+Peso: 110
+
+nome: Carolina Peixoto
+passou: False
+humano: True
+falas: Por favor nao me queime! Eu sei consertar radios e terminais antigos!, Sou Carolina Peixoto nascida em 23/09/1989 no Setor Norte registro 9183-U., Perdi minha mochila na tempestade mas trouxe meu cartao de identificacao!
+temp_base: 36
+temp_max: 37
+freq_base: 89
+freq_maxim: 129
+identidade: 9183-U, Carolina Peixoto, Dedos manchados de solda e luvas sem pontas, 66, Setor Norte, 23/09/1989
+registro: 9183-U, Carolina Peixoto, Setor Norte, 23/09/1989, 66, Tecnica de Telecomunicacoes, Habilidade requisitada na manutencao de Outpost Alpha
+Peso: 61
+
+nome: Daniel Krauss
+passou: False
+humano: False
+falas: Abra o portao para o cidadao 1001-Z. Eu sou humano como voce Inspetor., Nasci em 01/01/2000 em Outpost Alpha e minha funcao e substituir quem se foi., Voce tambem nao sente frio ai dentro dessa sala trancada nao e mesmo Unidade Alpha-04?
+temp_base: 25
+temp_max: 50
+freq_base: 0
+freq_maxim: 300
+identidade: 1001-Z, Daniel Krauss, Sorriso imovel no escuro e olhos refletindo a luz do sensor, 75, Outpost Alpha, 01/01/2000
+registro: 1001-Z, REGISTRO INEXISTENTE, Desconhecido, 00/00/0000, 0, Unidade de Dissonancia Pura, Alerta maximo de seguranca no terminal
+Peso: 125
