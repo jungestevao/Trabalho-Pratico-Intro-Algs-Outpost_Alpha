@@ -17,7 +17,8 @@ from src.config import (
     SPRITE_LOGO_PUC,
     MUSICA_FIM_FASE,
     MUSICA_HISTORIA,
-    MUSICA_MENU
+    MUSICA_MENU,
+    DADOS
 )
 from src.dados import(
     registrar_dados
@@ -63,7 +64,7 @@ class Botao:
 def fechar_jogo(dados):
     """ Finalizar a execução do jogo. """
     dados["tela"] = "abertura"
-    registrar_dados(dados)
+    registrar_dados(dados,DADOS)
     pygame.quit()
     exit()
 
@@ -163,11 +164,7 @@ def executar_abertura(tela,clock,dados):
     Saída: 
         None
     """
-    # Config fonte texto
-    fonte_texto = pygame.font.Font(None, 50)
-    texto = fonte_texto.render("Bem vindo a Outpost Alpha!", False, "White")
-    texto_ret = texto.get_rect(midtop = (400, 100))
-
+    
     # Config logo puc
     logo_puc = pygame.image.load(SPRITE_LOGO_PUC).convert_alpha()
     rect_logo_puc = logo_puc.get_rect(center=tela.get_rect().center) # Liga a logo ao retângulo ligado ao centro da tela
@@ -190,16 +187,16 @@ def executar_abertura(tela,clock,dados):
     # Sequência de animações
     if mostrar_com_fade(tela, clock, logo_puc, rect_logo_puc, dados) == "menu":
         dados["tela"] = "menu"
-        return registrar_dados(dados)
+        return registrar_dados(dados,DADOS)
     if mostrar_com_fade(tela, clock, logo_ES, rect_logo_ES, dados) == "menu":
         dados["tela"] = "menu"
-        return registrar_dados(dados)
+        return registrar_dados(dados,DADOS)
     if mostrar_com_fade(tela, clock, logo_grupo, rect_logo_grupo, dados) == "menu":
         dados["tela"] = "menu"
-        return registrar_dados(dados)
+        return registrar_dados(dados),DADOS
 
     dados["tela"] = "menu"
-    return registrar_dados(dados)
+    return registrar_dados(dados,DADOS)
 
 
 def gerar_flocos():
@@ -310,14 +307,14 @@ def executar_menu_config(tela,clock,dados):
                     dados["volume"] = round(dados["volume"] + 0.1, 1)
                     
                 pygame.mixer.music.set_volume(dados["volume"])
-                registrar_dados(dados)
+                registrar_dados(dados,DADOS)
             elif btn_sair.foi_clicado(eventos):
                 dados["tela"] = "menu"
-                registrar_dados(dados)
+                registrar_dados(dados,DADOS)
                 return
             elif btn_historia.foi_clicado(eventos):
                 dados["tela"] = "historia-btn"
-                registrar_dados(dados)
+                registrar_dados(dados,DADOS)
                 return
 
         btn_volume.desenhar(tela)
@@ -367,16 +364,16 @@ def executar_menu(tela, clock, dados):
             if botao_jogar.foi_clicado(evento):
                 if dados["historia"]:
                     dados["tela"] = "historia"
-                    registrar_dados(dados)
+                    registrar_dados(dados,DADOS)
                     pygame.mixer.music.fadeout(1)
                     return
                 else: 
                     dados["tela"] = "jogo"
-                    registrar_dados(dados)
+                    registrar_dados(dados,DADOS)
                     return
             elif botao_config.foi_clicado(evento):
                 dados["tela"] = "config"
-                registrar_dados(dados)
+                registrar_dados(dados,DADOS)
                 return
             elif botao_sair.foi_clicado(evento):
                 fechar_jogo(dados)

@@ -1,5 +1,5 @@
 import ast
-from config import DADOS
+from src.config import DADOS
 
 def iniciar_dados(arquivo = DADOS):
     """
