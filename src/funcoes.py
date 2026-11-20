@@ -24,7 +24,25 @@ from src.dados import(
     registrar_dados
 )
 class Botao:
+    """
+    Representa um botão interativo com troca de sprite no hover e texto centralizado.
+
+    OBS: Usado nas telas de menu e configurações do jogo.
+    """
     def __init__(self, img_normal_base, img_hover_base, texto, fonte, pos_centro):
+        """
+        Inicializa as superfícies normal e hover do botão com o texto renderizado.
+
+        Parâmetros:
+            img_normal_base (pygame.Surface): imagem base do botão sem seleção.
+            img_hover_base (pygame.Surface): imagem base do botão com seleção.
+            texto (str): rótulo exibido no centro do botão.
+            fonte (pygame.font.Font): fonte usada para renderizar o rótulo.
+            pos_centro (tuple): coordenadas (x, y) do centro do botão na tela.
+
+        Saída:
+            None
+        """
         # 1. Prepara a imagem do estado NORMAL (com texto)
         self.img_normal = img_normal_base.copy()
         self._escrever_texto(self.img_normal, texto, fonte, (220, 220, 220))
@@ -38,12 +56,32 @@ class Botao:
         self.rect = self.image.get_rect(center=pos_centro)
 
     def _escrever_texto(self, superficie, texto, fonte, cor):
-        """Centraliza o texto dentro da superfície do botão."""
+        """
+        Centraliza o texto dentro da superfície do botão.
+
+        Parâmetros:
+            superficie (pygame.Surface): superfície onde o texto será desenhado.
+            texto (str): conteúdo textual a ser renderizado.
+            fonte (pygame.font.Font): fonte usada na renderização.
+            cor (tuple): cor RGB do texto.
+
+        Saída:
+            None
+        """
         txt_surf = fonte.render(texto, True, cor)
         txt_rect = txt_surf.get_rect(center=(superficie.get_width() // 2, superficie.get_height() // 2))
         superficie.blit(txt_surf, txt_rect)
 
     def desenhar(self, tela):
+        """
+        Atualiza o sprite conforme a posição do mouse e desenha o botão na tela.
+
+        Parâmetros:
+            tela (pygame.Surface): superfície principal onde o botão será exibido.
+
+        Saída:
+            None
+        """
         # Verifica a posição atual do mouse a cada frame
         pos_mouse = pygame.mouse.get_pos()
 
@@ -56,19 +94,49 @@ class Botao:
         tela.blit(self.image, self.rect)
 
     def foi_clicado(self, evento):
+        """
+        Verifica se o evento informado corresponde a um clique esquerdo no botão.
+
+        Parâmetros:
+            evento (pygame.event.Event): evento capturado da fila do Pygame.
+
+        Saída:
+            (bool): True se o botão esquerdo do mouse clicou dentro do retângulo.
+        """
         if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
             return self.rect.collidepoint(evento.pos)
         return False
 
 
 def fechar_jogo(dados):
-    """ Finalizar a execução do jogo. """
+    """
+    Salva o estado de retorno à abertura e encerra a execução do jogo.
+
+    Parâmetros:
+        dados (dict): dicionário com os dados persistidos do jogador.
+
+    Saída:
+        None
+
+    OBS: Encerra o Pygame e finaliza o processo via sys.exit().
+    """
     dados["tela"] = "abertura"
     registrar_dados(dados,DADOS)
     pygame.quit()
     exit()
 
 def configurar_sprite_botao():
+    """
+    Carrega e redimensiona os sprites padrão de botão e a fonte do menu.
+
+    Parâmetros:
+        None.
+
+    Saídas:
+        btn_normal (pygame.Surface): sprite do botão sem seleção (200x60).
+        btn_hover (pygame.Surface): sprite do botão com seleção (200x60).
+        fonte_menu (pygame.font.Font): fonte configurada para os rótulos do menu.
+    """
 
     btn_normal = pygame.image.load(SPRITE_BTN_DESATIVO).convert_alpha()
     btn_hover = pygame.image.load(SPRITE_BTN_ATIVO).convert_alpha()
@@ -80,7 +148,16 @@ def configurar_sprite_botao():
     return btn_normal,btn_hover,fonte_menu
 
 def executar_musica(dados,musica):
-    """Executa a música do menu"""
+    """
+    Inicializa o mixer e reproduz uma faixa musical em loop conforme o volume.
+
+    Parâmetros:
+        dados (dict): dicionário com a configuração 'volume'.
+        musica (str): caminho do arquivo de áudio a ser reproduzido.
+
+    Saída:
+        None
+    """
     # Config música
 
     pygame.mixer.init()
@@ -92,7 +169,16 @@ def executar_musica(dados,musica):
     pygame.mixer.music.play(-1)
 
 def conferir_inputs(dados):
-    """Processa inputs globais e devolve eventos para a tela atual."""
+    """
+    Processa inputs globais (QUIT, F11, ESC, ESPAÇO) e devolve demais eventos.
+
+    Parâmetros:
+        dados (dict): dicionário com o estado atual do jogo.
+
+    Saídas:
+        estado (str | None): 'menu' quando a tecla Espaço é pressionada, ou None.
+        eventos_da_tela (list): lista de eventos restantes para a tela atual.
+    """
     eventos_da_tela = []
     estado = None
 
@@ -112,7 +198,22 @@ def conferir_inputs(dados):
     return estado, eventos_da_tela
 
 def mostrar_com_fade(tela, clock, imagem, rect, dados, t_fadein=2000, t_parado=2000, t_fadeout=2000,):
-    """Exibe qualquer Surface (imagem ou texto) com fade-in, pausa e fade-out."""
+    """
+    Exibe uma Surface com efeito de fade-in, pausa estática e fade-out.
+
+    Parâmetros:
+        tela (pygame.Surface): superfície principal do jogo.
+        clock (pygame.time.Clock): relógio usado para controlar o FPS.
+        imagem (pygame.Surface): imagem ou texto a ser exibido com transparência.
+        rect (pygame.Rect): retângulo de posicionamento da imagem na tela.
+        dados (dict): dicionário de estado usado para verificar atalhos globais.
+        t_fadein (int): duração do fade-in em milissegundos.
+        t_parado (int): duração da exibição com opacidade total em milissegundos.
+        t_fadeout (int): duração do fade-out em milissegundos.
+
+    Saída:
+        (str | None): retorna 'menu' se o usuário pular com Espaço, ou None ao concluir.
+    """
     tempo_inicio = pygame.time.get_ticks()
     
     fim_fadein = t_fadein
@@ -193,7 +294,7 @@ def executar_abertura(tela,clock,dados):
         return registrar_dados(dados,DADOS)
     if mostrar_com_fade(tela, clock, logo_grupo, rect_logo_grupo, dados) == "menu":
         dados["tela"] = "menu"
-        return registrar_dados(dados),DADOS
+        return registrar_dados(dados,DADOS)
 
     dados["tela"] = "menu"
     return registrar_dados(dados,DADOS)
@@ -221,7 +322,16 @@ def gerar_flocos():
     return flocos_neve
 
 def atualizar_flocos(tela, flocos_neve):
-    """Atualiza as posições e desenha os flocos de neve na tela."""
+    """
+    Atualiza as posições dos flocos de neve e os desenha na tela.
+
+    Parâmetros:
+        tela (pygame.Surface): superfície onde os flocos serão desenhados.
+        flocos_neve (list): lista de flocos [x, y, vel_y, vel_x, tamanho].
+
+    Saída:
+        None
+    """
     for floco in flocos_neve:
         floco[1] += floco[2]
         floco[0] += floco[3]
@@ -326,7 +436,17 @@ def executar_menu_config(tela,clock,dados):
         clock.tick(FPS)
 
 def executar_menu(tela, clock, dados):
-    """Executa o loop do menu principal"""
+    """
+    Executa o loop principal do menu inicial do jogo.
+
+    Parâmetros:
+        tela (pygame.Surface): superfície principal do jogo.
+        clock (pygame.time.Clock): relógio usado para controlar o FPS.
+        dados (dict): dicionário com o estado e configurações persistidas do jogador.
+
+    Saída:
+        None
+    """
     # Config das imagens do menu
     imagem_fundo = pygame.image.load(SPRITE_FUNDO_MENU).convert()
     imagem_fundo = pygame.transform.scale(imagem_fundo, (LARGURA_TELA, ALTURA_TELA))
@@ -395,6 +515,17 @@ def executar_menu(tela, clock, dados):
         clock.tick(FPS)
 
 def executar_fases(tela,clock,dados):
+    """
+    Exibe a tela provisória de aviso para fases ainda em desenvolvimento.
+
+    Parâmetros:
+        tela (pygame.Surface): superfície principal do jogo.
+        clock (pygame.time.Clock): relógio usado para controlar o FPS.
+        dados (dict): dicionário com o estado e configurações do jogador.
+
+    Saída:
+        None
+    """
 
     fonte = pygame.font.Font(FONTE_MENU[0],20)
     texto = fonte.render("EM DESENVOLVIMENTO - AGRADECEMOS SUA PACIENCIA!", True, "White")

@@ -34,7 +34,17 @@ CENAS = [
 
 
 def _preparar_imagem(caminho, tela):
-    """Carrega a imagem e a redimensiona para caber na tela, mantendo a proporção."""
+    """
+    Carrega a imagem e a redimensiona para caber na tela, mantendo a proporção.
+
+    Parâmetros:
+        caminho (str): caminho do arquivo de imagem da cena.
+        tela (pygame.Surface): superfície principal do jogo usada como referência de tamanho.
+
+    Saídas:
+        img (pygame.Surface): imagem escalada proporcionalmente.
+        rect (pygame.Rect): retângulo centralizado na tela.
+    """
     img = pygame.image.load(caminho).convert()
     escala = min(tela.get_width() / img.get_width(), tela.get_height() / img.get_height())
     novo_tamanho = (int(img.get_width() * escala), int(img.get_height() * escala))
@@ -44,7 +54,17 @@ def _preparar_imagem(caminho, tela):
 
 
 def _quebrar_texto(texto, fonte, largura_max):
-    """Divide o texto em linhas que caibam na largura máxima."""
+    """
+    Divide o texto em linhas que caibam na largura máxima.
+
+    Parâmetros:
+        texto (str): texto completo da legenda.
+        fonte (pygame.font.Font): fonte usada para medir a largura das palavras.
+        largura_max (int): largura máxima da linha em pixels.
+
+    Saída:
+        (list): lista de strings correspondentes às linhas quebradas.
+    """
     linhas = []
     atual = ""
     for palavra in texto.split():
@@ -63,21 +83,41 @@ def _processar_eventos(dados):
     """
     Processa os inputs globais durante a história.
 
+    Parâmetros:
+        dados (dict): dicionário com o estado atual do jogo.
+
     Saída:
-        bool: True se a barra de espaço foi apertada (pula a cena atual).
+        (bool): True se a barra de espaço foi apertada (pula ou completa a cena atual).
     """
     estado, _ = conferir_inputs(dados)
     return estado == "menu"
 
 
 def _ease_out(t):
-    """Curva de desaceleração: começa rápido e termina suave (0 a 1)."""
+    """
+    Calcula curva de desaceleração cúbica entre 0 e 1.
+
+    Parâmetros:
+        t (float): progresso normalizado da animação.
+
+    Saída:
+        (float): valor suavizado no intervalo [0.0, 1.0].
+    """
     t = max(0.0, min(1.0, t))
     return 1 - (1 - t) ** 3
 
 
 def _letras_visiveis_por_linha(linhas, total_letras):
-    """Distribui as letras já digitadas entre as linhas da legenda."""
+    """
+    Distribui as letras já digitadas entre as linhas da legenda.
+
+    Parâmetros:
+        linhas (list): lista de linhas quebradas do texto completo.
+        total_letras (int): quantidade total de caracteres visíveis até o momento.
+
+    Saída:
+        (list): lista de trechos visíveis para cada linha.
+    """
     restantes = total_letras
     partes = []
     for linha in linhas:
@@ -89,8 +129,18 @@ def _letras_visiveis_por_linha(linhas, total_letras):
 
 def mostrar_cena(tela, clock, caminho, legenda, indice, dados):
     """
-    Mostra uma imagem fixa até o usuário pressionar Espaço.
-    A legenda é digitada letra por letra enquanto a cena permanece na tela.
+    Mostra uma imagem fixa até o usuário pressionar Espaço, com legenda digitada.
+
+    Parâmetros:
+        tela (pygame.Surface): superfície principal do jogo.
+        clock (pygame.time.Clock): relógio usado para controlar o FPS.
+        caminho (str): caminho da imagem da cena.
+        legenda (str): texto narrativo exibido na parte inferior da tela.
+        indice (int): posição da cena na lista CENAS (define direção da entrada).
+        dados (dict): dicionário de estado e configurações do jogador.
+
+    Saída:
+        None
     """
     img, rect_final = _preparar_imagem(caminho, tela)
     direcao = -1 if indice % 2 == 0 else 1
@@ -158,13 +208,15 @@ def executar_historia(tela, clock, dados, eh_botao):
     animações de entrada e a música da história.
 
     Parâmetros:
-        tela (Surface): superfície principal do jogo.
-        clock (Clock): relógio usado para controlar o FPS.
+        tela (pygame.Surface): superfície principal do jogo.
+        clock (pygame.time.Clock): relógio usado para controlar o FPS.
+        dados (dict): dicionário persistido com o estado e volume do jogo.
+        eh_botao (bool): indica se a história foi aberta pelo menu de configurações.
 
     Saída:
-        Nada
+        None
 
-    OBS: Atualiza os dados da tela na memória
+    OBS: Atualiza os dados da tela na memória e persiste em arquivo.
     """
     pygame.mixer.init()
     pygame.mixer.music.load(MUSICA_HISTORIA)

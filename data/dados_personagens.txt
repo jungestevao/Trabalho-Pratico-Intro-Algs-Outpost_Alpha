@@ -1,4 +1,4 @@
-20
+21
 10
 nome:Marcos Silva
 passou:False
@@ -239,3 +239,15 @@ freq_maxim: 300
 identidade: 1001-Z, Daniel Krauss, Sorriso imovel no escuro e olhos refletindo a luz do sensor, 75, Outpost Alpha, 01/01/2000
 registro: 1001-Z, REGISTRO INEXISTENTE, Desconhecido, 00/00/0000, 0, Unidade de Dissonancia Pura, Alerta maximo de seguranca no terminal
 Peso: 125
+
+nome: Laerte Xavier
+passou: False
+humano: True
+falas: Boa noite Inspetor. Preciso entrar em Outpost Alpha pois ainda preciso corrigir as entregas da turma antes do amanhecer., Sou Laerte Xavier professor de Introdução a Algoritmos e coordenador do curso de Engenharia de Software registro 4210-L nascido em 18/05/1983., Prefiro nao comentar sobre minha saúde corporal mas todos os meus dados e sinais vitais sao humanos!
+temp_base: 36
+temp_max: 37
+freq_base: 84
+freq_maxim: 118
+identidade: 4210-L, Laerte Xavier, Barba aparada e expressao acolhedora apesar do cansaco, 88, Zona Central, 18/05/1983
+registro: 4210-L, Laerte Xavier, Zona Central, 18/05/1983, 88, Professor e Coordenador de Engenharia de Software, Autorizado pelo conselho academico sem anomalias
+Peso: 88

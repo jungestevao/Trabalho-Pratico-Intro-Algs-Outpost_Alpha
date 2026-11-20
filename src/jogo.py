@@ -25,9 +25,22 @@ from src.dados import(
     ler_dados,
     registrar_dados,
 )
+from src.fase import(
+    executar_fase
+)
 
 def executar_jogo():
-    """Executa o loop principal do jogo e controla estado, colisões e pontuação."""
+    """
+    Inicializa o Pygame e executa o loop principal de roteamento entre telas.
+
+    Parâmetros:
+        None.
+
+    Saída:
+        None
+
+    OBS: Lê continuamente o estado salvo em DADOS para decidir qual tela executar.
+    """
 
     pygame.init()
 
@@ -56,4 +69,4 @@ def executar_jogo():
         elif estado_memoria["tela"] == "historia-btn":
             executar_historia(tela,clock,estado_memoria, True)
         elif estado_memoria["tela"] == "jogo":
-            executar_fases(tela,clock,estado_memoria)
+            executar_fase(tela,clock,estado_memoria)

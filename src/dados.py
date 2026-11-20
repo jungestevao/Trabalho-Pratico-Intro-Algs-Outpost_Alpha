@@ -27,11 +27,11 @@ def ler_dados(arquivo):
     """
     Lê os dados em data/dados_jogador.txt e transforma em dicionário.
 
-    Parâmentros:
+    Parâmetros:
         arquivo (str): caminho do arquivo.
 
     Saída:
-        (Dict): dicionário com o nome dos dados em chaves e seu valor atribuído.
+        (dict): dicionário com o nome dos dados em chaves e seu valor atribuído.
     """
     dic = {}
 
@@ -49,12 +49,13 @@ def ler_dados(arquivo):
 
 def registrar_dados(dicionario,arquivo):
     """
-    Lê os dados do dicionário local e registra em arquivo
+    Lê os dados do dicionário local e registra em arquivo.
 
     Parâmetros:
-        dicionário(dict): dicionário com os dados organizados.
-    
-    Saídas: 
+        dicionario (dict): dicionário com os dados organizados.
+        arquivo (str): caminho do arquivo onde os dados serão salvos.
+
+    Saídas:
         None
 
     OBS: Após o fim da execução, o arquivo é atualizado.
@@ -64,6 +65,17 @@ def registrar_dados(dicionario,arquivo):
             dados.write(f"{chave},{dicionario[chave]}\n")
 
 def iniciar_personagens(dados_personagens = "data/dados_personagens.txt"):
+    """
+    Lê o arquivo de personagens e monta o dicionário estruturado de visitantes.
+
+    Parâmetros:
+        dados_personagens (str): caminho do arquivo de dados dos personagens.
+
+    Saída:
+        (dict): dicionário indexado pelo nome do personagem com todos os seus atributos.
+
+    OBS: Preserva a ordem de inserção dos personagens no arquivo.
+    """
 
     dic = {}
 
@@ -90,4 +102,5 @@ def iniciar_personagens(dados_personagens = "data/dados_personagens.txt"):
             dados.readline()
     return dic
 
-print(iniciar_personagens())
+if __name__ == "__main__":
+    print(iniciar_personagens())
